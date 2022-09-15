@@ -12,9 +12,9 @@ exports.authenticatedUser = catchError(async (req, res, next) => {
     );
   }
 
-  const verified = jwt.verify(token, process.env.JWT_SECRET);
-  req.user = await User.findById(verified.id);
-
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  req.user = await User.findById(decoded.id);
+  console.log(decoded.id);
   next();
 });
 // Membatasi peran untuk mengakses halaman admin
