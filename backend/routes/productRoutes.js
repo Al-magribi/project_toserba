@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   getProducts,
   productById,
@@ -6,21 +7,28 @@ const {
   updateProduct,
   deleteProduct,
 } = require("../controller/productController");
-const router = express.Router();
+const { authenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 //Menambahkan produk baru => Admin
-router.route("/produk/admin/tambah").post(addNewProduct);
+// Creating new product
+router.route("/produk/admin/tambah").post(authenticatedUser, addNewProduct);
 
 // Mengupdate product => Admin
-router.route("/produk/admin/update/:id").put(updateProduct);
+// Updating new product
+router.route("/produk/admin/update/:id").put(authenticatedUser, updateProduct);
 
 // Menghapus produk => Admin
-router.route("/produk/admin/hapus/:id").delete(deleteProduct);
+// Deleting product
+router
+  .route("/produk/admin/hapus/:id")
+  .delete(authenticatedUser, deleteProduct);
 
 // Menampilkan seluruh produk => Client
-router.route("/produk").get(getProducts);
+// Shoqwing all products
+router.route("/produk").get(authorizeRoles("admin"), getProducts);
 
 // Menampilkan produk bersadarkan id => Client
+// Showing product based on its ID
 router.route("/produk/:id").get(productById);
 
 module.exports = router;

@@ -1,19 +1,23 @@
+const APIfeatures = require("../utilities/apiFeatures");
 const asyncHandler = require("express-async-handler");
-const Product = require("../models/product");
+const catchError = require("../middlewares/catchError");
 const ErrorHandler = require("../utilities/ErrorHandler");
+const Product = require("../models/product");
 
 // Menambahkan produk baru => Admin
-exports.addNewProduct = async (req, res) => {
+// Creating product
+exports.addNewProduct = catchError(async (req, res) => {
   const product = await Product.create(req.body);
 
   res.status(201).json({
     success: true,
     product,
   });
-};
+});
 
 // Mengupdate produk => Admin
-exports.updateProduct = async (req, res) => {
+// Updating product
+exports.updateProduct = catchError(async (req, res) => {
   let product = await Product.findById(req.params.id);
 
   if (!product) {
@@ -31,10 +35,11 @@ exports.updateProduct = async (req, res) => {
     success: true,
     product,
   });
-};
+});
 
 // Menghapus produk => Admin
-exports.deleteProduct = async (req, res) => {
+// Deleting product
+exports.deleteProduct = catchError(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (!product) {
@@ -46,30 +51,35 @@ exports.deleteProduct = async (req, res) => {
     success: true,
     message: "Berhasil dihapus",
   });
-};
+});
 
 // Menampilkan seluruh produk => Client
-exports.getProducts = async (req, res) => {
-  const products = await Product.find();
+// Showing products
+exports.getProducts = catchError(async (req, res) => {
+  // menentukan produk yang tampil ber halaman
+  const productPerPage = 8;
+
+  // fitur search menggunakan keyword nama produk, diharapkan seluruh produk yang memiliki huruf yang
+  // sama akan muncul
+  // url /api/toserba/produk?ketword="nama_produk"
+  const apiFeatures = new APIfeatures(Product.find(), req.query)
+    .search()
+    .filter()
+    .pagination(productPerPage);
+
+  const products = await apiFeatures.query;
+
   res.status(200).json({
     success: true,
     count: products.length,
     products,
   });
-};
+});
 
 // Menampilan produk berdasarkan ID => Client
-exports.productById = async (req, res, next) => {
+// Showing products based on Id
+exports.productById = catchError(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
-
-  //   if (!product) {
-  //     return next(new ErrorHandler("Produk tidak ditemukan", 404));
-  //   }
-
-  //   res.status(200).json({
-  //     success: true,
-  //     product,
-  //   });
 
   if (product) {
     res.status(200).json({
@@ -77,10 +87,6 @@ exports.productById = async (req, res, next) => {
       product,
     });
   } else {
-    return next(new ErrorHandler("produk tidak ditemukan", 404));
-    // res.status(404).json({
-    //   success: false,
-    //   message: "Produk tidak ditemukan",
-    // });
+    return next(new ErrorHandler("Produk tidak ditemukan", 404));
   }
-};
+});
