@@ -14,22 +14,26 @@ exports.authenticatedUser = catchError(async (req, res, next) => {
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   req.user = await User.findById(decoded.id);
-  console.log(decoded.id);
+
   next();
 });
 // Membatasi peran untuk mengakses halaman admin
+// Role handler
 exports.authorizeRoles = (...roles) => {
-  console.log(roles);
-  return (req, res, next) => {
-    console.log(req.user);
+  return catchError(async (req, res, next) => {
+    const { token } = req.cookies;
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = await User.findById(decoded.id);
+
     if (!roles.includes(req.user.role)) {
       return next(
         new ErrorHandler(
-          `Role (${req.user.role}) is not allowed to acccess this resource`,
+          `Akun anda ${req.user.role} tidak diizinkan untuk mengakses halaman ini`,
           403
         )
       );
     }
     next();
-  };
+  });
 };

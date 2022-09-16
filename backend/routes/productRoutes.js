@@ -11,21 +11,25 @@ const { authenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 //Menambahkan produk baru => Admin
 // Creating new product
-router.route("/produk/admin/tambah").post(authenticatedUser, addNewProduct);
+router
+  .route("/produk/admin/tambah")
+  .post(authenticatedUser, authorizeRoles("admin"), addNewProduct);
 
 // Mengupdate product => Admin
 // Updating new product
-router.route("/produk/admin/update/:id").put(authenticatedUser, updateProduct);
+router
+  .route("/produk/admin/update/:id")
+  .put(authenticatedUser, authorizeRoles("admin"), updateProduct);
 
 // Menghapus produk => Admin
 // Deleting product
 router
   .route("/produk/admin/hapus/:id")
-  .delete(authenticatedUser, deleteProduct);
+  .delete(authenticatedUser, authorizeRoles("admin"), deleteProduct);
 
 // Menampilkan seluruh produk => Client
 // Shoqwing all products
-router.route("/produk").get(authorizeRoles("admin"), getProducts);
+router.route("/produk").get(getProducts);
 
 // Menampilkan produk bersadarkan id => Client
 // Showing product based on its ID

@@ -2,6 +2,7 @@ const User = require("../models/users");
 const catchError = require("../middlewares/catchError");
 const ErrorHandler = require("../utilities/ErrorHandler");
 const sendToken = require("../utilities/cookie");
+const sendEmail = require("../utilities/sendEmail");
 
 exports.registerUser = catchError(async (req, res, next) => {
   const { nama, email, password } = req.body;
@@ -57,6 +58,49 @@ exports.loginUser = catchError(async (req, res, next) => {
   //   success: true,
   //   token,
   // });
+});
+
+// Lupa password / Forgot password
+exports.resetPassword = catchError(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return next(new ErrorHandler("Email tidak terdaftar", 404));
+  }
+
+  //reset TOKEN
+  const resetToken = user.ResetPasswordToken();
+  await user.save({ validateBeforeSave: false });
+
+  // url untuk reset password
+  const urlReset = `${req.protocol}://${req.get("host")}/reset/${resetToken}`;
+
+  // Pesan email untuk reset password
+  const message = `Klik link dibawah ini unutk mereset password anda:\n\n${urlReset}\n\nAbaikan 
+    jika anda tidak mereset password`;
+
+  // mengirim Email untuk reset password
+  try {
+    // jika bersahil mengirim email
+    await sendEmail({
+      email: user.email,
+      subject: "toserba reset password",
+      message,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Email berhasil dikirim ke ${user.email}`,
+    });
+  } catch (error) {
+    // jika gagal merest password
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    return next(new ErrorHandler(error.message, 500));
+  }
 });
 
 // Logout User

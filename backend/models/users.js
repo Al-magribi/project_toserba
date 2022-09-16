@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
@@ -61,6 +62,23 @@ userSchema.methods.getJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES,
   });
+};
+
+// Generate TOKEN in Reseting Password
+userSchema.methods.ResetPasswordToken = function () {
+  //Generate TOKEN
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  //hash and Set Reset Password
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  // Set TOKEN Expires
+  this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
+
+  return resetToken;
 };
 
 module.exports = mongoose.model("user", userSchema);

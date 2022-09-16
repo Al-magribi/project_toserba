@@ -7,6 +7,8 @@ const Product = require("../models/product");
 // Menambahkan produk baru => Admin
 // Creating product
 exports.addNewProduct = catchError(async (req, res) => {
+  req.body.user = req.user.id;
+
   const product = await Product.create(req.body);
 
   res.status(201).json({
