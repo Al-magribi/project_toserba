@@ -29,7 +29,8 @@ exports.registerUser = catchError(async (req, res, next) => {
   // });
 });
 
-//Algoritma Login
+// Route Umum => admin & Client
+// Login user
 exports.loginUser = catchError(async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -61,6 +62,53 @@ exports.loginUser = catchError(async (req, res, next) => {
   // });
 });
 
+// User Profile
+exports.userProfile = catchError(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  // req.user.id diambil dari auth middleware yang sudah terlog di server
+  // setelah token user di verifikasi, seluruh data user dapat diakses
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+// Update profile
+exports.updateProfile = catchError(async (req, res, next) => {
+  // cek yang akan diupdate
+  const newUserData = {
+    nama: req.body.nama,
+    email: req.body.email,
+  };
+
+  // update
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
+// Update user password
+exports.updatePassword = catchError(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("+password");
+  // cek old password
+  const isMatched = await user.comparePassword(req.body.oldPassword);
+  if (!isMatched) {
+    return next(new ErrorHandler("Password tidak sesuai", 400));
+  } else {
+    user.password = req.body.password;
+
+    await user.save();
+
+    sendToken(user, 200, res);
+  }
+});
+
 // Lupa password / Forgot password
 exports.forgotPassword = catchError(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
@@ -86,7 +134,7 @@ exports.forgotPassword = catchError(async (req, res, next) => {
     // jika bersahil mengirim email
     await sendEmail({
       email: user.email,
-      subject: "toserba reset password",
+      subject: "TOSERBA reset password",
       message,
     });
 
@@ -138,7 +186,7 @@ exports.resetPassword = catchError(async (req, res, next) => {
 
     await user.save();
 
-    sendToken(token, 200, res);
+    sendToken(user, 200, res);
   }
 });
 
@@ -153,4 +201,63 @@ exports.logoutUser = catchError(async (req, res, next) => {
     success: true,
     message: "Logout Berhasil",
   });
+});
+
+// Route Admin
+//Get all Users
+exports.allusers = catchError(async (req, res, next) => {
+  const user = await User.find();
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+// Get users' detail
+exports.userDetail = catchError(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorHandler("user tidak ditemukan", 404));
+  } else {
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  }
+});
+
+// Delete user
+exports.deleteUser = catchError(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorHandler("User tidak ditemukan", 404));
+  } else {
+    await user.remove();
+    res.status(200).json({
+      success: true,
+      message: "User berhasil dihapus",
+    });
+  }
+});
+
+// Update user
+exports.updateUser = catchError(async (req, res, next) => {
+  let user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorHandler("User tidak ditemukan", 404));
+  } else {
+    user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  }
 });

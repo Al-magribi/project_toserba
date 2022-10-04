@@ -29,6 +29,24 @@ module.exports = (err, req, res, next) => {
       error = new ErrorHandler(message, 400);
     }
 
+    // Error mongoose duplicate => mendaftar dengan email yang sama
+    if (err.code === 11000) {
+      const message = `${Object.keys(err.keyValue)} sudah terdaftar`;
+      error = new ErrorHandler(message, 400);
+    }
+
+    // JWT Wrong Error
+    if (err.name === "JsonWebTokenError") {
+      const message = "Web Token Salah, Silahkan Coba Lagi!!!";
+      error = new ErrorHandler(message, 400);
+    }
+
+    //JWT Expired Error
+    if (err.name === "TokenExpiredError") {
+      const message = "Token kaladuarsa, Silahkan Coba Lagi!!!";
+      error = new ErrorHandler(message, 400);
+    }
+
     res.status(error.statusCode).json({
       success: false,
       message: error.message || "Internal Server Error",

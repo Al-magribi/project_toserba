@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const databaseConnection = require("./config/config");
 const product = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 const errorMiddleware = require("./middlewares/errors");
 
 const app = express();
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/toserba", product);
 app.use("/api/toserba", userRoutes);
+app.use("/api/toserba", orderRoutes);
 
 // Koneksi database
 databaseConnection();

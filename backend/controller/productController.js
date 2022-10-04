@@ -1,8 +1,8 @@
 const APIfeatures = require("../utilities/apiFeatures");
-const asyncHandler = require("express-async-handler");
 const catchError = require("../middlewares/catchError");
 const ErrorHandler = require("../utilities/ErrorHandler");
 const Product = require("../models/product");
+const product = require("../models/product");
 
 // Menambahkan produk baru => Admin
 // Creating product
@@ -91,4 +91,87 @@ exports.productById = catchError(async (req, res, next) => {
   } else {
     return next(new ErrorHandler("Produk tidak ditemukan", 404));
   }
+});
+
+// create review
+exports.createReview = catchError(async (req, res, next) => {
+  //deconstruct review
+  const { rating, comment, productId } = req.body;
+
+  //  review Object
+  const review = {
+    user: req.user._id,
+    nama: req.user.nama,
+    rating: Number(rating),
+    comment,
+  };
+
+  // cek produk
+  const product = await Product.findById(productId);
+
+  // cek sudah direview apa belum
+  const isReviewed = product.reviews.find(
+    (r) => r.user.toString() === req.user._id.toString()
+  );
+
+  if (isReviewed) {
+    product.reviews.forEach((review) => {
+      if (review.user.toString() === req.user._id.toString()) {
+        (review.comment = comment), (review.rating = rating);
+      }
+    });
+  } else {
+    product.reviews.push(review);
+    product.jmlReviews = product.reviews.length;
+  }
+
+  product.rating =
+    product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+    product.reviews.length;
+
+  await product.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
+// Get all product reviews
+exports.getReviews = catchError(async (req, res, next) => {
+  const product = await Product.findById(req.query.id);
+
+  res.status(200).json({
+    success: true,
+    reviews: product.reviews,
+  });
+});
+
+// Delete Product review
+exports.deleteReview = catchError(async (req, res, next) => {
+  //Mencari produk yang akan dihapus
+  const product = await Product.findById(req.query.productId);
+
+  // Mencari Review yang akan dihapus
+  const reviews = product.reviews.filter(
+    (review) => review._id.toString() !== req.query.id.toString()
+  );
+
+  // jumlah review setalah hapus review
+  const jmlReviews = reviews.length;
+
+  // jumlah rating setelah review dihapus
+  const ratings =
+    product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+    product.reviews.length;
+
+  // update review setalah review dihapus
+  await Product.findByIdAndUpdate(
+    req.query.productId,
+    { reviews, ratings, jmlReviews },
+    { new: true, runValidators: false }
+  );
+
+  res.status(200).json({
+    success: true,
+  });
 });

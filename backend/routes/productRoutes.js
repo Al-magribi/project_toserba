@@ -6,6 +6,9 @@ const {
   addNewProduct,
   updateProduct,
   deleteProduct,
+  createReview,
+  getReviews,
+  deleteReview,
 } = require("../controller/productController");
 const { authenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
@@ -34,5 +37,10 @@ router.route("/produk").get(getProducts);
 // Menampilkan produk bersadarkan id => Client
 // Showing product based on its ID
 router.route("/produk/:id").get(productById);
-
+// Creating Reviews => client
+router.route("/review").put(authenticatedUser, createReview);
+// Delete Reviews => Client & admin
+router.route("/reviews").delete(authenticatedUser, deleteReview);
+// all reviews => admin
+router.route("/reviews").get(authenticatedUser, getReviews);
 module.exports = router;
