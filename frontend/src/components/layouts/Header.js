@@ -4,12 +4,15 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
     <Navbar bg="primary" variant="dark">
       <Container>
-        <Navbar.Brand href="/">TOSERBA</Navbar.Brand>
+        <Link className="Brand" to="/">
+          <Navbar.Brand>TOSERBA</Navbar.Brand>
+        </Link>
         <Form className="d-flex form-search">
           <Form.Control
             type="search"

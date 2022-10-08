@@ -5,7 +5,11 @@
 h1 {
   padding: 2% 0;
 }
+
 /* Navbar */
+.Brand {
+  text-decoration: none;
+}
 .form-search {
   width: 600px;
 }
@@ -33,10 +37,60 @@ h1 {
   font-size: 0.9rem;
   margin-left: 0.5rem;
 }
+
 /* Home */
 .btn-produk {
   background-color: #ff731d !important;
   width: 150px;
+}
+
+/* Card */
+.card-product {
+  padding-bottom: 15px;
+}
+.card-title-home {
+  text-decoration: none;
+  color: black;
+}
+.details {
+  text-decoration: none;
+  color: white;
+}
+
+/* Ratings */
+.ratings {
+  font-size: 1.2rem;
+  color: #fdcc0d;
+}
+
+#no_of_reviews {
+  font-size: 0.85rem;
+  color: grey;
+  margin-left: 0.5rem;
+}
+.rating-outer {
+  display: inline-block;
+  position: relative;
+  font-family: FontAwesome;
+  color: #fdcc0d;
+}
+
+.rating-outer::before {
+  content: "\f006 \f006 \f006 \f006 \f006";
+}
+
+.rating-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+}
+
+.rating-inner::before {
+  content: "\f005 \f005 \f005 \f005 \f005";
+  color: #f8ce0b;
 }
 /* Footer */
 .footer {
