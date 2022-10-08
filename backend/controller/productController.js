@@ -60,6 +60,7 @@ exports.deleteProduct = catchError(async (req, res) => {
 exports.getProducts = catchError(async (req, res) => {
   // menentukan produk yang tampil ber halaman
   const productPerPage = 8;
+  const productsCount = await Product.countDocuments();
 
   // fitur search menggunakan keyword nama produk, diharapkan seluruh produk yang memiliki huruf yang
   // sama akan muncul
@@ -73,7 +74,7 @@ exports.getProducts = catchError(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    count: products.length,
+    productsCount,
     products,
   });
 });
