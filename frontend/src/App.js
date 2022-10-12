@@ -4,6 +4,7 @@ import Container from "react-bootstrap/esm/Container";
 import Header from "./components/layouts/Header";
 import Footer from "./components/layouts/Footer";
 import Home from "./components/Home";
+import ProductDetail from "./components/product/ProductDetail";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Container>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/produk/:id" element={<ProductDetail />} />
           </Routes>
         </Container>
         <Footer />

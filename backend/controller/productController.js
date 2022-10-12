@@ -57,7 +57,7 @@ exports.deleteProduct = catchError(async (req, res) => {
 
 // Menampilkan seluruh produk => Client
 // Showing products
-exports.getProducts = catchError(async (req, res) => {
+exports.getProducts = catchError(async (req, res, next) => {
   // menentukan produk yang tampil ber halaman
   const productPerPage = 8;
   const productsCount = await Product.countDocuments();
