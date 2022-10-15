@@ -4,11 +4,13 @@ import {
   ProductDetailReducer,
   productsReducer,
 } from "./reducers/productsReducer";
+import { authReducer } from "./reducers/usersReducer";
 // import { composeWithDevTools } from "redux-devtools-extension";
 
 const reducer = {
   products: productsReducer,
   productDetail: ProductDetailReducer,
+  auth: authReducer,
 };
 
 const initialState = {};

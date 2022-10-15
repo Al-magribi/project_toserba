@@ -102,11 +102,10 @@ const Home = () => {
                       14000000: "14jt",
                       16000000: "16jt",
                       18000000: "18jt",
-                      20000000: "20 jt",
                     }}
                     min={1}
-                    max={20000000}
-                    defaultValue={(1, 20000000)}
+                    max={18000000}
+                    defaultValue={(1, 10000000)}
                     tipFormatter={(value) => `Rp ${value}`}
                     tipProps={{
                       placement: "top",

@@ -21,9 +21,11 @@ const Header = () => {
               2
             </span>
           </Nav.Link>
-          <Button type="button" className="btn btn-login">
-            Login
-          </Button>
+          <Link to="/login">
+            <Button type="button" className="btn btn-login">
+              Login
+            </Button>
+          </Link>
         </Nav>
       </Container>
     </Navbar>

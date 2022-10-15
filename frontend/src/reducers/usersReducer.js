@@ -1,0 +1,42 @@
+import {
+  CLEAR_ERROR,
+  LOGIN_FAIL,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+} from "../constants/userConstants";
+
+export const authReducer = (state = { user: [] }, action) => {
+  switch (action.type) {
+    case LOGIN_REQUEST:
+      return {
+        loading: true,
+        authenticatedUser: false,
+      };
+
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        authenticatedUser: true,
+        user: action.payload,
+      };
+
+    case LOGIN_FAIL:
+      return {
+        ...state,
+        loading: false,
+        authenticatedUser: false,
+        user: null,
+        error: action.payload,
+      };
+
+    case CLEAR_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};

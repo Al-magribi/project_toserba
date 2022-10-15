@@ -6,6 +6,12 @@ h1 {
   padding: 2% 0;
 }
 
+/* Login Page */
+.login-page {
+  min-height: 50vh;
+  margin: 10% 30%;
+}
+
 /* Navbar */
 .Brand {
   text-decoration: none;
@@ -64,9 +70,6 @@ h1 {
 }
 
 /* Buttons */
-.btn-produk {
-  background-color: #ff731d !important;
-}
 .btn-cart,
 .btn-buy,
 .btn-review,
@@ -80,7 +83,7 @@ h1 {
 .btn-review:hover,
 .btn-login:hover,
 .btn-produk:hover {
-  background-color: #1746a2 !important;
+  background-color: #1da9ff !important;
 }
 
 /* Card */
@@ -170,8 +173,9 @@ h1 {
   text-align: right !important;
 }
 
-/* Review pop-up */
-.kolom-review {
+/* pop-up review, register */
+.kolom-review,
+.register {
   margin-top: 5rem;
 }
 .stars {
