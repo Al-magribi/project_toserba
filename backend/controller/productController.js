@@ -67,14 +67,19 @@ exports.getProducts = catchError(async (req, res, next) => {
   // url /api/toserba/produk?ketword="nama_produk"
   const apiFeatures = new APIfeatures(Product.find(), req.query)
     .search()
-    .filter()
-    .pagination(productPerPage);
+    .filter();
 
-  const products = await apiFeatures.query;
+  let products = await apiFeatures.query;
+  let filteredProductsCount = products.length;
+
+  apiFeatures.pagination(productPerPage);
+  products = await apiFeatures.query.clone();
 
   res.status(200).json({
     success: true,
     productsCount,
+    filteredProductsCount,
+    productPerPage,
     products,
   });
 });

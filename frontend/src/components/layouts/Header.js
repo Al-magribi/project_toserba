@@ -2,9 +2,9 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import { Link } from "react-router-dom";
+import Search from "./Search";
 
 const Header = () => {
   return (
@@ -13,17 +13,7 @@ const Header = () => {
         <Link className="Brand" to="/">
           <Navbar.Brand>TOSERBA</Navbar.Brand>
         </Link>
-        <Form className="d-flex form-search">
-          <Form.Control
-            type="search"
-            placeholder="Cari produk ..."
-            className="mx-auto search"
-            aria-label="Search"
-          />
-          <Button variant="btn btn-light b-search">
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </Button>
-        </Form>
+        <Search />
         <Nav className="me">
           <Nav.Link href="#">
             <span className="fa-solid fa-cart-shopping"> </span>

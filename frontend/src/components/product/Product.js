@@ -16,17 +16,15 @@ const Product = ({ product }) => {
           </h6>
         </Card.Header>
         <Card.Body>
-          <Card.Text>
-            <div className="ratings mt-auto">
-              <div className="rating-outer">
-                <div
-                  className="rating-inner"
-                  style={{ width: `${(product.rating / 5) * 100}%` }}
-                ></div>
-              </div>
-              <span id="no_of_reviews">{product.jmlReviews} Reviews</span>
+          <div className="ratings mt-auto">
+            <div className="rating-outer">
+              <div
+                className="rating-inner"
+                style={{ width: `${(product.rating / 5) * 100}%` }}
+              ></div>
             </div>
-          </Card.Text>
+            <span id="no_of_reviews">{product.jmlReviews} Ulasan</span>
+          </div>
           <Card.Text>
             <NumericFormat
               value={product.harga}

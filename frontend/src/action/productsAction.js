@@ -10,23 +10,32 @@ import {
 } from "../constants/productsConstant";
 
 // Action All products
-export const getProducts = () => async (dispatch) => {
-  try {
-    dispatch({ type: ALL_PRODUCTS_REQUEST });
+export const getProducts =
+  (keyword = "", currentPage = 1, harga, kategori, rating = 0) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: ALL_PRODUCTS_REQUEST });
 
-    const { data } = await axios.get("/api/toserba/produk");
+      // API DATA Product dari backend
+      let link = `/api/toserba/produk?keyword=${keyword}&page=${currentPage}&harga[lte]=${harga[1]}&harga[gte]=${harga[0]}&rating[gte]=${rating}`;
 
-    dispatch({
-      type: ALL_PRODUCTS_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: ALL_PRODUCTS_FAIL,
-      payload: error.response.data.message,
-    });
-  }
-};
+      if (kategori) {
+        link = `/api/toserba/produk?keyword=${keyword}&page=${currentPage}&harga[lte]=${harga[1]}&harga[gte]=${harga[0]}&kategori=${kategori}&rating[gte]=${rating}`;
+      }
+
+      const { data } = await axios.get(link);
+
+      dispatch({
+        type: ALL_PRODUCTS_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: ALL_PRODUCTS_FAIL,
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 // Action Product detail
 export const getProductDetail = (id) => async (dispatch) => {

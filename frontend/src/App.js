@@ -14,6 +14,7 @@ function App() {
         <Container>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/search/:keyword" element={<Home />} />
             <Route path="/produk/:id" element={<ProductDetail />} />
           </Routes>
         </Container>
