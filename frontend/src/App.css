@@ -83,9 +83,12 @@ h1 {
 .btn-review:hover,
 .btn-login:hover,
 .btn-produk:hover {
-  background-color: #1da9ff !important;
+  background-color: #e5671a !important;
 }
 
+.btn-forgot {
+  text-align: right !important;
+}
 /* Card */
 .card-product {
   padding-bottom: 15px;

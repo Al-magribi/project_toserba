@@ -4,11 +4,15 @@ import {
   LOGIN_FAIL,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  REGISTER_FAIL,
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
 } from "../constants/userConstants";
 
+// Login Action
 export const login = (email, password) => async (dispatch) => {
   try {
-    dispatch(LOGIN_REQUEST);
+    dispatch({ type: LOGIN_REQUEST });
 
     const config = {
       headers: {
@@ -29,6 +33,33 @@ export const login = (email, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: LOGIN_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Register ACtion
+export const register = (userData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: REGISTER_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    const { data } = await axios.put("/api/toserba/daftar", userData, config);
+
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: REGISTER_FAIL,
       payload: error.response.data.message,
     });
   }
