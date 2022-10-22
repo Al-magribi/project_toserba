@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dbonnection = async (req, res) => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI);
+
     console.log(`tersambung ${conn.connection.host}`);
   } catch (error) {
     console.error(`Error: ${error.message}`);

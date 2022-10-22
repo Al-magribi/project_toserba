@@ -7,12 +7,15 @@ const product = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const errorMiddleware = require("./middlewares/errors");
+const cloudinary = require("cloudinary").v2;
+const fileUpload = require("express-fileupload");
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+app.use(fileUpload());
 
 app.get("/", (req, res) => {
   res.send("Server ok");
@@ -24,6 +27,14 @@ app.use("/api/toserba", orderRoutes);
 
 // Koneksi database
 databaseConnection();
+
+// konfigurasi cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_KEY,
+  api_secret: process.env.CLOUD_SECRET,
+  secure: true,
+});
 
 // error middleware harus diletakan dibawah routes
 app.use(errorMiddleware);

@@ -1,11 +1,19 @@
 const User = require("../models/users");
 const catchError = require("../middlewares/catchError");
+const cloudinary = require("cloudinary").v2;
 const crypto = require("crypto");
 const ErrorHandler = require("../utilities/ErrorHandler");
 const sendToken = require("../utilities/cookie");
 const sendEmail = require("../utilities/sendEmail");
 
 exports.registerUser = catchError(async (req, res, next) => {
+  // Cloudinary configuration upload
+  const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: "Avatars",
+    width: 150,
+    crop: "scale",
+  });
+
   const { nama, email, password } = req.body;
 
   const user = await User.create({
@@ -13,8 +21,8 @@ exports.registerUser = catchError(async (req, res, next) => {
     email,
     password,
     avatar: {
-      public_id: "people/boy-snow-hoodie",
-      url: "https://res.cloudinary.com/pt-edutech/image/upload/v1661959044/samples/people/boy-snow-hoodie.jpg",
+      public_id: result.public_id,
+      url: result.secure_url,
     },
   });
 

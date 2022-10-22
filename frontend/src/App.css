@@ -1,15 +1,9 @@
 /* General */
-.home {
-  min-height: 85vh;
+body {
+  min-height: 80vh;
 }
 h1 {
   padding: 2% 0;
-}
-
-/* Login Page */
-.login-page {
-  min-height: 50vh;
-  margin: 10% 30%;
 }
 
 /* Navbar */
@@ -86,8 +80,8 @@ h1 {
   background-color: #e5671a !important;
 }
 
-.btn-forgot {
-  text-align: right !important;
+.register {
+  text-decoration: none !important;
 }
 /* Card */
 .card-product {
@@ -176,8 +170,7 @@ h1 {
   text-align: right !important;
 }
 
-/* pop-up review, register */
-.kolom-review,
+/* pop-up review */
 .register {
   margin-top: 5rem;
 }
@@ -194,6 +187,27 @@ h1 {
   font-size: 3rem;
   padding-left: 2rem;
   color: #e3e3e3;
+}
+
+/* Register Page */
+.avatar {
+  display: inline-block;
+  margin-bottom: 0;
+  height: 3rem;
+  width: 3rem;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rounded-circle {
+  border-radius: 50% !important;
 }
 
 /* Footer */
