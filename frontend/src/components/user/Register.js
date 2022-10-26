@@ -7,11 +7,6 @@ import { register, clearError } from "../../action/usersAction";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  // Konfigurasi aplikasi
-  const Alert = useAlert();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const [user, setUser] = useState({
     nama: "",
     email: "",
@@ -23,6 +18,11 @@ const Register = () => {
   const [avatarPreview, setAvatarPreview] = useState(
     "/images/default_avatar.jpg"
   );
+
+  // Konfigurasi aplikasi
+  const Alert = useAlert();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { authenticatedUser, loading, error } = useSelector(
     (state) => state.auth

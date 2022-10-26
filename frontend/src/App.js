@@ -7,8 +7,16 @@ import Home from "./components/Home";
 import ProductDetail from "./components/product/ProductDetail";
 import Login from "./components/user/Login";
 import Register from "./components/user/Register";
+import { useEffect } from "react";
+import store from "./store";
+import { loadUser } from "./action/usersAction";
+import Profile from "./components/user/Profile";
+import Orders from "./components/orders/Orders";
 
 function App() {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
   return (
     <>
       <BrowserRouter>
@@ -20,6 +28,8 @@ function App() {
             <Route path="/produk/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/daftar" element={<Register />} />
+            <Route path="/me" element={<Profile />} />
+            <Route path="/orders/me" element={<Orders />} />
           </Routes>
         </Container>
         <Footer />

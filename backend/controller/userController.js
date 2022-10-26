@@ -1,6 +1,6 @@
 const User = require("../models/users");
 const catchError = require("../middlewares/catchError");
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require("cloudinary");
 const crypto = require("crypto");
 const ErrorHandler = require("../utilities/ErrorHandler");
 const sendToken = require("../utilities/cookie");

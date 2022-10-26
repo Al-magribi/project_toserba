@@ -1,9 +1,12 @@
 import axios from "axios";
 import {
   CLEAR_ERROR,
+  LOAD_USER_FAIL,
+  LOAD_USER_SUCCESS,
   LOGIN_FAIL,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
@@ -51,7 +54,7 @@ export const register = (userData) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.put("/api/toserba/daftar", userData, config);
+    const { data } = await axios.post("/api/toserba/daftar", userData, config);
 
     dispatch({
       type: REGISTER_SUCCESS,
@@ -60,6 +63,43 @@ export const register = (userData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: REGISTER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Load User Ation
+export const loadUser = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: LOGIN_REQUEST,
+    });
+
+    const { data } = await axios.get("/api/toserba/me");
+
+    dispatch({
+      type: LOAD_USER_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOAD_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Logout
+export const logout = () => async (dispatch) => {
+  try {
+    await axios.get("/api/toserba/logout");
+
+    dispatch({
+      type: LOGOUT_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOGIN_FAIL,
       payload: error.response.data.message,
     });
   }

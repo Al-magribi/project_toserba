@@ -7,16 +7,26 @@ h1 {
 }
 
 /* Navbar */
+.avatar-nav {
+  margin-right: 0.6rem;
+  height: 2.2rem;
+  width: 2.2rem;
+}
+
 .Brand {
   text-decoration: none;
 }
+
 .form-search {
-  width: 600px;
+  width: 500px;
+  margin: 1rem 7rem;
 }
+
 .search {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
+
 .b-search {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
@@ -31,6 +41,24 @@ h1 {
   font-weight: bold;
   font-size: 0.9rem;
   margin-left: 0.5rem;
+  margin-right: 1rem;
+}
+
+.cart-link,
+.login {
+  margin: auto;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  text-decoration: none !important;
+  width: fit-content;
+}
+
+.dropdown-menu :hover {
+  background-color: #efefef !important;
+  color: black !important;
+  text-decoration: none !important;
 }
 
 /* Loader */
@@ -43,6 +71,7 @@ h1 {
   height: 80px;
   padding-left: 0;
 }
+
 .loader:after {
   content: " ";
   display: block;
@@ -72,6 +101,7 @@ h1 {
   background-color: #ff731d !important;
   border: #ff731d !important;
 }
+
 .btn-cart:hover,
 .btn-buy:hover,
 .btn-review:hover,
@@ -83,14 +113,17 @@ h1 {
 .register {
   text-decoration: none !important;
 }
+
 /* Card */
 .card-product {
   padding-bottom: 15px;
 }
+
 .card-title-home {
   text-decoration: none;
   color: black;
 }
+
 .details {
   text-decoration: none;
   color: white;
@@ -107,6 +140,7 @@ h1 {
   color: grey;
   margin-left: 0.5rem;
 }
+
 .rating-outer {
   display: inline-block;
   position: relative;
@@ -137,6 +171,7 @@ h1 {
   min-height: 85vh;
   padding: 2% 0;
 }
+
 .detail-img {
   padding: 3rem 0;
 }
@@ -147,11 +182,13 @@ h1 {
   width: 3rem;
   text-align: center;
 }
+
 .stockCounter input::-webkit-outer-spin-button,
 .stockCounter input::-webkit-inner-spin-button {
   appearance: none;
   margin: 0;
 }
+
 .plus,
 .minus {
   padding: 0.1rem 0.5rem;
@@ -162,10 +199,12 @@ h1 {
   font-weight: bold;
   color: green;
 }
+
 .redColor {
   font-weight: bold;
   color: red;
 }
+
 .btn-review-position {
   text-align: right !important;
 }
@@ -174,6 +213,7 @@ h1 {
 .register {
   margin-top: 5rem;
 }
+
 .stars {
   height: 100px;
   display: flex;
