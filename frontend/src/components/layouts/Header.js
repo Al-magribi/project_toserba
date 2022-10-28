@@ -1,6 +1,7 @@
 import { useAlert } from "react-alert";
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 import Search from "./Search";
 import { Button, Container, Navbar, Nav, Dropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,9 +24,9 @@ const Header = () => {
     <Fragment>
       <Navbar bg="primary" expand="lg">
         <Container>
-          <Link to="/" className="Brand">
+          <LinkContainer to="/" className="Brand">
             <Navbar.Brand className="text-white">TOSERBA</Navbar.Brand>
-          </Link>
+          </LinkContainer>
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
             className="text-white"
@@ -34,11 +35,7 @@ const Header = () => {
             <Nav className="ms-auto">
               <Search />
               <br />
-              <Link
-                to="/cart"
-                style={{ textDecoration: "none" }}
-                className="cart-link"
-              >
+              <Link to="/cart" className="cart-link">
                 <span className="fa-solid fa-cart-shopping fa-lg text-white">
                   {" "}
                 </span>
@@ -63,31 +60,19 @@ const Header = () => {
                     id="dropdown-item-button"
                     className="dropdown-menu"
                   >
-                    <Dropdown.Item>
-                      <Link
-                        to="/me"
-                        style={{ textDecoration: "none", color: "black" }}
-                      >
-                        Profile
-                      </Link>
-                    </Dropdown.Item>
-                    <Dropdown.Item>
-                      {user && user.role === "admin" ? (
-                        <Link
-                          to="/dashboard"
-                          style={{ textDecoration: "none", color: "black" }}
-                        >
-                          Dashboard
-                        </Link>
-                      ) : (
-                        <Link
-                          to="/orders/me"
-                          style={{ textDecoration: "none", color: "black" }}
-                        >
-                          Pesanan
-                        </Link>
-                      )}
-                    </Dropdown.Item>
+                    <LinkContainer to="/me">
+                      <Dropdown.Item>Profile</Dropdown.Item>
+                    </LinkContainer>
+
+                    {user && user.role === "admin" ? (
+                      <LinkContainer to="/dashboard">
+                        <Dropdown.Item>Dasboard</Dropdown.Item>
+                      </LinkContainer>
+                    ) : (
+                      <LinkContainer to="/orders/me">
+                        <Dropdown.Item>Pesanan</Dropdown.Item>
+                      </LinkContainer>
+                    )}
                     <Dropdown.Item
                       className="text-danger"
                       onClick={logoutHandler}

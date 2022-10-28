@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useAlert } from "react-alert";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../layouts/Loader";
 import MetaData from "../layouts/MetaData";

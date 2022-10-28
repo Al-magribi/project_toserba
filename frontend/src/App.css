@@ -250,6 +250,22 @@ h1 {
   border-radius: 50% !important;
 }
 
+/* profile */
+.profile {
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+}
+
+.avatar-profile {
+  height: 20rem;
+  width: 20rem;
+  margin: 1rem 4rem;
+}
+
+.block-profile {
+  align-items: center;
+}
+
 /* Footer */
 .footer {
   font-size: 10px;
