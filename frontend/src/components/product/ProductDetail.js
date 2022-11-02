@@ -7,16 +7,19 @@ import { Button, Col, Row, Modal, Carousel } from "react-bootstrap";
 import { NumericFormat } from "react-number-format";
 import MetaData from "../layouts/MetaData";
 import Loader from "../layouts/Loader";
+import { addToCart } from "../../action/cartAction";
 
 // submit Review popup Using Modal from bootstrap modul
 
 const ProductDetail = () => {
+  const [quantity, setQuantity] = useState(1);
+
   // Pop-up Review product
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const alert = useAlert;
+  const Alert = useAlert();
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -27,10 +30,40 @@ const ProductDetail = () => {
   useEffect(() => {
     dispatch(getProductDetail(params.id));
     if (error) {
-      alert.error(error);
+      Alert.error(error);
       dispatch(clearError());
     }
-  }, [dispatch, params.id, alert, error]);
+  }, [dispatch, params.id, Alert, error]);
+
+  // kirim produk ke cart
+  const toCart = () => {
+    dispatch(addToCart(params.id, quantity));
+    Alert.success("Item berhasil ditambahkan");
+  };
+
+  // tombol +
+  const increase = () => {
+    const count = document.querySelector(".count");
+
+    if (count.valueAsNumber >= product.stok) {
+      return;
+    } else {
+      const qty = count.valueAsNumber + 1;
+      setQuantity(qty);
+    }
+  };
+
+  // tombol -
+  const decrease = () => {
+    const count = document.querySelector(".count");
+
+    if (count.valueAsNumber <= 1) {
+      return;
+    } else {
+      const qty = count.valueAsNumber - 1;
+      setQuantity(qty);
+    }
+  };
 
   return (
     <Fragment>
@@ -69,19 +102,34 @@ const ProductDetail = () => {
               <Row>
                 <Col>
                   <div className="stockCounter d-inline text-center">
-                    <span className="btn btn-outline-light minus">-</span>
+                    <span
+                      className="btn btn-outline-light minus"
+                      onClick={decrease}
+                    >
+                      -
+                    </span>
                     <input
                       type="number"
                       className="form-control count d-inline"
-                      value="10"
+                      value={quantity}
                       readOnly
                     />
-                    <span className="btn btn-outline-light plus">+</span>
+                    <span
+                      className="btn btn-outline-light plus"
+                      onClick={increase}
+                    >
+                      +
+                    </span>
                   </div>
                 </Col>
                 <Col>
                   <div className="text-center">
-                    <Button type="button" className="btn btn-cart text-white">
+                    <Button
+                      type="button"
+                      className="btn btn-cart text-white"
+                      onClick={toCart}
+                      disabled={product.stok === 0}
+                    >
                       + Keranjang
                     </Button>
                   </div>

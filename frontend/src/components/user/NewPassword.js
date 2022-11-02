@@ -15,9 +15,7 @@ const NewPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const { error, success, loading } = useSelector(
-    (state) => state.forgotPassword
-  );
+  const { error, success } = useSelector((state) => state.forgotPassword);
 
   useEffect(() => {
     if (error) {
@@ -38,7 +36,7 @@ const NewPassword = () => {
     formData.set("password", password);
     formData.set("confirmPassword", confirmPassword);
 
-    dispatch(resetPassword(params.token, formData));
+    dispatch(resetPassword(formData, params.token));
   };
 
   return (
@@ -74,11 +72,7 @@ const NewPassword = () => {
                     />
                   </Form.Group>
                   <div className="text-center">
-                    <Button
-                      type="submit"
-                      className="btn btn-send"
-                      disabled={loading ? true : false}
-                    >
+                    <Button type="submit" className="btn btn-send">
                       Kirim
                     </Button>
                   </div>
