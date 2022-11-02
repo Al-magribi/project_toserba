@@ -11,6 +11,14 @@ import {
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  UPDATE_PASSWORD_FAIL,
+  UPDATE_PASSWORD_REQUEST,
+  UPDATE_PASSWORD_RESET,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PROFILE_FAIL,
+  UPDATE_PROFILE_REQUEST,
+  UPDATE_PROFILE_RESET,
+  UPDATE_PROFILE_SUCCESS,
 } from "../constants/userConstants";
 
 export const authReducer = (state = { user: [] }, action) => {
@@ -70,6 +78,42 @@ export const authReducer = (state = { user: [] }, action) => {
         error: null,
       };
 
+    default:
+      return state;
+  }
+};
+
+// Update profile
+export const userReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_PROFILE_REQUEST:
+    case UPDATE_PASSWORD_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UPDATE_PROFILE_SUCCESS:
+    case UPDATE_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isUpdate: action.payload,
+      };
+
+    case UPDATE_PROFILE_RESET:
+    case UPDATE_PASSWORD_RESET:
+      return {
+        ...state,
+        isUpdate: false,
+      };
+
+    case UPDATE_PROFILE_FAIL:
+    case UPDATE_PASSWORD_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
     default:
       return state;
   }

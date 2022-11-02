@@ -266,6 +266,12 @@ h1 {
   align-items: center;
 }
 
+/* update profile */
+.update-profile {
+  margin-top: 4rem;
+  margin-bottom: 6rem;
+}
+
 /* Footer */
 .footer {
   font-size: 10px;

@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   CLEAR_ERROR,
   LOAD_USER_FAIL,
+  LOAD_USER_REQUEST,
   LOAD_USER_SUCCESS,
   LOGIN_FAIL,
   LOGIN_REQUEST,
@@ -10,6 +11,12 @@ import {
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  UPDATE_PASSWORD_FAIL,
+  UPDATE_PASSWORD_REQUEST,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PROFILE_FAIL,
+  UPDATE_PROFILE_REQUEST,
+  UPDATE_PROFILE_SUCCESS,
 } from "../constants/userConstants";
 
 // Login Action
@@ -72,7 +79,7 @@ export const register = (userData) => async (dispatch) => {
 export const loadUser = () => async (dispatch) => {
   try {
     dispatch({
-      type: LOGIN_REQUEST,
+      type: LOAD_USER_REQUEST,
     });
 
     const { data } = await axios.get("/api/toserba/me");
@@ -100,6 +107,68 @@ export const logout = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: LOGIN_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+//Update user profile
+export const updateProfile = (userData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: UPDATE_PROFILE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    const { data } = await axios.put(
+      "/api/toserba/me/update",
+      userData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_PROFILE_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PROFILE_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// update user password
+export const updatePassword = (password) => async (dispatch) => {
+  try {
+    dispatch({
+      type: UPDATE_PASSWORD_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(
+      "/api/toserba/password/update",
+      password,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_PASSWORD_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PASSWORD_FAIL,
       payload: error.response.data.message,
     });
   }
