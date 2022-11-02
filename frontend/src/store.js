@@ -4,7 +4,11 @@ import {
   ProductDetailReducer,
   productsReducer,
 } from "./reducers/productsReducer";
-import { authReducer, userReducer } from "./reducers/usersReducer";
+import {
+  authReducer,
+  forgotPassword,
+  userReducer,
+} from "./reducers/usersReducer";
 // import { composeWithDevTools } from "redux-devtools-extension";
 
 const reducer = {
@@ -12,6 +16,7 @@ const reducer = {
   productDetail: ProductDetailReducer,
   auth: authReducer,
   user: userReducer,
+  forgotPassword: forgotPassword,
 };
 
 const initialState = {};

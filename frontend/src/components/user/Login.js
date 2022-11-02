@@ -79,7 +79,7 @@ const Login = () => {
                           </Button>
                         </div>
 
-                        <Link to="/password/forgot">
+                        <Link to="/forgot">
                           <div className="btn-forgot">
                             <Button className="btn btn-light" type="button">
                               Lupa Password

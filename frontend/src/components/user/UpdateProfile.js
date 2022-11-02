@@ -89,7 +89,7 @@ const UpdateProfile = () => {
                       type="text"
                       name="nama"
                       placeholder="Masukan Nama Lengkap"
-                      value={nama}
+                      value={nama || ""}
                       onChange={(e) => setNama(e.target.value)}
                     />
                   </Form.Group>
@@ -101,7 +101,7 @@ const UpdateProfile = () => {
                       type="email"
                       name="email"
                       placeholder="Masukan Email kamu"
-                      value={email}
+                      value={email || ""}
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </Form.Group>

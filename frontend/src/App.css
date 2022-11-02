@@ -97,7 +97,9 @@ h1 {
 .btn-buy,
 .btn-review,
 .btn-login,
-.btn-produk {
+.btn-produk,
+.btn-update,
+.btn-send {
   background-color: #ff731d !important;
   border: #ff731d !important;
 }
@@ -106,7 +108,9 @@ h1 {
 .btn-buy:hover,
 .btn-review:hover,
 .btn-login:hover,
-.btn-produk:hover {
+.btn-produk:hover,
+.btn-update:hover,
+.btn-send:hover {
   background-color: #e5671a !important;
 }
 
@@ -266,8 +270,11 @@ h1 {
   align-items: center;
 }
 
-/* update profile */
-.update-profile {
+/* update profile, update password, forgot password */
+.update-profile,
+.update-password,
+.forgot-password,
+.reset-password {
   margin-top: 4rem;
   margin-bottom: 6rem;
 }

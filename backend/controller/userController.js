@@ -149,12 +149,15 @@ exports.forgotPassword = catchError(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // url untuk reset password
-  const urlReset = `${req.protocol}://${req.get("host")}/reset/${resetToken}`;
+  // aktifkan jika blm ke frontend
+  // const urlReset = `${req.protocol}://${req.get("host")}/reset/${resetToken}`;
+
+  const urlReset = `${process.env.FRONTEND_URL}/reset/${resetToken}`;
 
   // Pesan email untuk reset password / reset password URL
   const message = `Klik link dibawah ini unutk mereset password anda:\n\n${urlReset}\n\nAbaikan jika anda tidak mereset password`;
   // Notifikasi email berhasil dikirim / successful sending email notification
-  const success = `Email berhasil dikirim ke ${user.email} cek spam jika tidak ada di inbox`;
+  const success = `terkirim ke ${user.email} cek spam jika tidak ada di inbox`;
 
   // mengirim Email untuk reset password
   try {

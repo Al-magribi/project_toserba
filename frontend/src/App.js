@@ -16,6 +16,8 @@ import ProtectedRoute from "./components/route/ProtectedRoute";
 import Dashboard from "./components/admin/Dashboard";
 import UpdateProfile from "./components/user/UpdateProfile";
 import UpdatePassword from "./components/user/UpdatePassword";
+import ForgotPassword from "./components/user/ForgotPassword";
+import NewPassword from "./components/user/NewPassword";
 
 function App() {
   useEffect(() => {
@@ -56,6 +58,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/reset/:token" element={<NewPassword />} />
+            <Route path="/forgot" element={<ForgotPassword />} />
             <Route path="/orders/me" element={<Orders />} />
             <Route
               path="/dashboard"
