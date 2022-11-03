@@ -1,7 +1,9 @@
 /* General */
 body {
-  min-height: 80vh;
+  min-height: 80vh !important;
+  background-color: #f8ce0b;
 }
+
 h1 {
   padding: 2% 0;
 }
@@ -99,7 +101,8 @@ h1 {
 .btn-login,
 .btn-produk,
 .btn-update,
-.btn-send {
+.btn-send,
+.btn-out {
   background-color: #ff731d !important;
   border: #ff731d !important;
 }
@@ -110,7 +113,8 @@ h1 {
 .btn-login:hover,
 .btn-produk:hover,
 .btn-update:hover,
-.btn-send:hover {
+.btn-send:hover,
+.btn-out:hover {
   background-color: #e5671a !important;
 }
 
@@ -279,6 +283,18 @@ h1 {
   margin-bottom: 6rem;
 }
 
+/* cart */
+.fa-trash {
+  color: red;
+}
+
+.nama-item-cart {
+  font-size: 14px;
+}
+
+.cart-screen {
+  margin-bottom: 9rem;
+}
 /* Footer */
 .footer {
   font-size: 10px;

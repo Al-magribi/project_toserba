@@ -21,7 +21,7 @@ const reducer = {
   cart: cartReducer,
 };
 
-let initialState = {
+const initialState = {
   cart: {
     cartItems: localStorage.getItem("cartItems")
       ? JSON.parse(localStorage.getItem("cartItems"))
@@ -31,6 +31,10 @@ let initialState = {
 
 const middleware = [thunk];
 
-const store = configureStore({ reducer, initialState, middleware });
+const store = configureStore({
+  reducer: reducer,
+  preloadedState: initialState,
+  middleware: middleware,
+});
 
 export default store;
