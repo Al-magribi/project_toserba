@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import Search from "./Search";
-import { Button, Container, Navbar, Nav, Dropdown } from "react-bootstrap";
+import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../action/usersAction";
 
@@ -14,6 +14,7 @@ const Header = () => {
 
   // data user dari state
   const { user, loading } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -35,13 +36,26 @@ const Header = () => {
             <Nav className="ms-auto">
               <Search />
               <br />
-              <Link to="/cart" className="cart-link">
+              <Link
+                to="/cart"
+                className="cart-link"
+                style={{ textDecoration: "none" }}
+              >
                 <span className="fa-solid fa-cart-shopping fa-lg text-white">
                   {" "}
                 </span>
-                <span className="ml-1" id="cart_count">
-                  2
-                </span>
+                {user ? (
+                  <span className="ml-1" id="cart_count">
+                    {cartItems.reduce(
+                      (quantity, item) => quantity + Number(item.quantity),
+                      0
+                    )}
+                  </span>
+                ) : (
+                  <span className="ml-1" id="cart_count">
+                    0
+                  </span>
+                )}
               </Link>
               <br />
               {user ? (
@@ -83,11 +97,11 @@ const Header = () => {
                 </Dropdown>
               ) : (
                 !loading && (
-                  <Link to="/login" className="login">
-                    <Button type="button" className="btn btn-login text-white">
+                  <LinkContainer to="/login" className="login">
+                    <span type="button" className="btn btn-login text-white">
                       Login
-                    </Button>
-                  </Link>
+                    </span>
+                  </LinkContainer>
                 )
               )}
             </Nav>

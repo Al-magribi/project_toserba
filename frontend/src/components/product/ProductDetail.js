@@ -144,7 +144,8 @@ const ProductDetail = () => {
               </Row>
               <hr />
               <Col className={product.stok > 0 ? "greenColor" : "redColor"}>
-                Status: {product.stok > 0 ? "Tersedia" : "Habis"}
+                Status: {product.stok > 0 ? "Tersedia" : "Habis"} {product.stok}{" "}
+                item
               </Col>
               <hr />
               <Col>Detail : {product.deskripsi}</Col>
