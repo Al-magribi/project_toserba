@@ -43,4 +43,5 @@ router.route("/review").put(authenticatedUser, createReview);
 router.route("/reviews").delete(authenticatedUser, deleteReview);
 // all reviews => admin
 router.route("/reviews").get(authenticatedUser, getReviews);
+
 module.exports = router;

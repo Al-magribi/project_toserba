@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeItem } from "../../action/cartAction";
 import MetaData from "../layouts/MetaData";
 import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -164,7 +165,9 @@ const Cart = () => {
                   <Row>
                     <Col>
                       <div className="text-center">
-                        <Button className="btn btn-out">Check Out</Button>
+                        <LinkContainer to="/shipping">
+                          <Button className="btn btn-out">Check Out</Button>
+                        </LinkContainer>
                       </div>
                     </Col>
                   </Row>
