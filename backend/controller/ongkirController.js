@@ -20,3 +20,18 @@ exports.getAllCities = (req, res) => {
     .then((response) => res.json(response.data))
     .catch((err) => res.send(err));
 };
+
+// menghitung ongkir
+exports.getCost = (req, res) => {
+  const param = req.params;
+
+  axios
+    .post("/cost", {
+      origin: param.asal,
+      destination: param.tujuan,
+      weight: param.berat,
+      courier: param.kurir,
+    })
+    .then((response) => res.json(response.data))
+    .catch((err) => res.err);
+};

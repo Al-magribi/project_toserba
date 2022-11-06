@@ -4,7 +4,12 @@ body {
   background-color: #f8ce0b;
 }
 
-h1 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   padding: 2% 0;
 }
 
@@ -288,11 +293,9 @@ h1 {
   color: red;
 }
 
-.nama-item-cart {
+.cart-screen,
+.shipping-screen {
   font-size: 14px;
-}
-
-.cart-screen {
   margin-bottom: 12rem;
 }
 /* Footer */
