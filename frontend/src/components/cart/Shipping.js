@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
+import { Form } from "react-bootstrap";
 
 const Shipping = () => {
   // List Provinsi
   const [province, setProvince] = useState([]);
-  const [idProvince, setIdProvince] = useState();
 
   // list kota berdasarkan provinsi
   const [city, setCity] = useState([]);
@@ -14,28 +14,14 @@ const Shipping = () => {
   const getProvinces = async () => {
     const data = await fetch("/api/toserba/provinsi");
     const value = await data.json();
-    const provinces = value.rajaongkir.results.map((data) => {
-      return {
-        value: data.province_id,
-        label: data.province,
-      };
-    });
+    const provinces = value.rajaongkir.results;
     setProvince(provinces.sort());
   };
 
-  const idHandler = (value) => {
-    setIdProvince(value);
-  };
-
-  const getProvinceId = async () => {
-    const data = await fetch(`/api/toserba/kota/${idProvince}`);
-    const value = await data.json();
-    const cities = value.rajaongkir.results.map((data) => {
-      return {
-        value: data.city_id,
-        label: data.city_name,
-      };
-    });
+  const getCities = async (value) => {
+    const data = await fetch(`/api/toserba/kota/${value}`);
+    const values = await data.json();
+    const cities = values.rajaongkir.results;
     setCity(cities.sort());
   };
 
@@ -45,13 +31,22 @@ const Shipping = () => {
 
   return (
     <div>
-      {<Select options={province} onChange={(e) => idHandler(e.value)} />}
-      <hr />
-      <span className="btn" onClick={() => getProvinceId()}>
-        pilih provinsi
-      </span>
-      <hr />
-      {<Select options={city} />}
+      <Form.Select onChange={(e) => getCities(e.target.value)}>
+        <option disabled="">-- Pilih Provinsi --</option>
+        {province.map((data) => (
+          <option key={data.province_id} value={data.province_id}>
+            {data.province}
+          </option>
+        ))}
+      </Form.Select>
+      <Form.Select onChange={(e) => console.log(e.target.value)}>
+        <option disabled="">-- Pilih Kota --</option>
+        {city.map((data) => (
+          <option key={data.city_id} value={data.city_id}>
+            {data.city_name}
+          </option>
+        ))}
+      </Form.Select>
     </div>
   );
 };
