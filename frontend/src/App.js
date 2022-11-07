@@ -1,4 +1,5 @@
 import "./App.css";
+import React, { useEffect } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Container from "react-bootstrap/esm/Container";
 import Header from "./components/layouts/Header";
@@ -7,7 +8,6 @@ import Home from "./components/Home";
 import ProductDetail from "./components/product/ProductDetail";
 import Login from "./components/user/Login";
 import Register from "./components/user/Register";
-import { useEffect } from "react";
 import store from "./store";
 import { loadUser } from "./action/usersAction";
 import Profile from "./components/user/Profile";
@@ -26,7 +26,7 @@ function App() {
     store.dispatch(loadUser());
   }, []);
   return (
-    <>
+    <div>
       <BrowserRouter>
         <Header />
         <Container>
@@ -91,7 +91,7 @@ function App() {
         </Container>
         <Footer />
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

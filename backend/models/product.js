@@ -59,6 +59,10 @@ const productSchema = new mongoose.Schema({
     required: [true, "Masukan stok produk"],
     default: 0,
   },
+  berat: {
+    type: Number,
+    required: [true, "masukan berat produk"],
+  },
   jmlReviews: {
     type: Number,
     default: 0,
