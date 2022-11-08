@@ -150,8 +150,9 @@ const ProductDetail = () => {
               <hr />
               <Col>Detail : {product.deskripsi}</Col>
               <hr />
-              <Col>Penjual : {product.penjual}</Col>
+              <Col>Berat : {product.berat} gr</Col>
               <hr />
+              <Col>Penjual : {product.penjual}</Col>
               <Col>
                 <div className="btn-review-position">
                   <Button

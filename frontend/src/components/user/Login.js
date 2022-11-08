@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../layouts/Loader";
 import MetaData from "../layouts/MetaData";
 import { login, clearError } from "../../action/usersAction";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
   // Application
@@ -14,14 +14,19 @@ const Login = () => {
   const dispatch = useDispatch();
   const Alert = useAlert();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { authenticatedUser, loading, error } = useSelector(
     (state) => state.auth
   );
 
+  const redirect = location.search
+    ? location.search.split("=")[1]
+    : "/shipping";
+
   useEffect(() => {
     if (authenticatedUser) {
-      navigate("/");
+      navigate(redirect);
     }
 
     if (error) {

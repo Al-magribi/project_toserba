@@ -20,6 +20,8 @@ import ForgotPassword from "./components/user/ForgotPassword";
 import NewPassword from "./components/user/NewPassword";
 import Cart from "./components/cart/Cart";
 import Shipping from "./components/cart/Shipping";
+import ConfirmOrder from "./components/cart/ConfirmOrder";
+import Payment from "./components/cart/Payment";
 
 function App() {
   useEffect(() => {
@@ -71,19 +73,28 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/cart"
-              element={
-                <ProtectedRoute>
-                  <Cart />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/cart" element={<Cart />} />
             <Route
               path="/shipping"
               element={
                 <ProtectedRoute>
                   <Shipping />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/confirm"
+              element={
+                <ProtectedRoute>
+                  <ConfirmOrder />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payment"
+              element={
+                <ProtectedRoute>
+                  <Payment />
                 </ProtectedRoute>
               }
             />

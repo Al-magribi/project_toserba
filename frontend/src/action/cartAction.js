@@ -1,5 +1,9 @@
 import axios from "axios";
-import { ADD_TO_CART, REMOVE_ITEM_CART } from "../constants/cartConstant";
+import {
+  ADD_TO_CART,
+  REMOVE_ITEM_CART,
+  SAVE_SHIPPING_INFO,
+} from "../constants/cartConstant";
 
 export const addToCart = (id, quantity) => async (dispatch, getState) => {
   // mencari id produk
@@ -13,6 +17,7 @@ export const addToCart = (id, quantity) => async (dispatch, getState) => {
       price: data.product.harga,
       image: data.product.gambar[0].url,
       stock: data.product.stok,
+      weight: data.product.berat,
       quantity,
     },
   });
@@ -27,4 +32,13 @@ export const removeItem = (id) => async (dispatch, getState) => {
   });
 
   localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
+};
+
+export const saveShippingInfo = (data) => async (dispatch) => {
+  dispatch({
+    type: SAVE_SHIPPING_INFO,
+    payload: data,
+  });
+
+  localStorage.setItem("shippingInfo", JSON.stringify(data));
 };

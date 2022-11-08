@@ -11,11 +11,13 @@ import { NumericFormat } from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeItem } from "../../action/cartAction";
 import MetaData from "../layouts/MetaData";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { cartItems } = useSelector((state) => state.cart);
 
   // tombol +
@@ -44,6 +46,10 @@ const Cart = () => {
     dispatch(removeItem(id));
   };
 
+  const checkoutHandler = () => {
+    navigate("/login?redirect=shipping");
+  };
+
   return (
     <div className="cart-screen">
       <MetaData title={"Keranjang"} />
@@ -51,85 +57,80 @@ const Cart = () => {
         <h2>Kosong nih, Belanja yuk</h2>
       ) : (
         <Fragment>
-          <h6 className="mt-5 mb-1">
-            Ada {cartItems.length} barang, bayar langsung yuk
-          </h6>
-          <Row className="mt-5 nama-item-cart cart-screen">
-            <Col lg={8}>
+          <h6>Ada {cartItems.length} barang, bayar langsung yuk</h6>
+          <Row className="mt-3 mb-5 nama-item-cart">
+            <Col xs={12} lg={8} className="mb-3">
               <ListGroup>
                 {cartItems.map((item) => (
-                  <Fragment key={item.product}>
-                    <ListGroupItem>
-                      <Row>
-                        <Col>
-                          <img
-                            src={item.image}
-                            alt={item.product}
-                            width="100"
-                            className="align-self-center text-center m-2"
-                          />
-                        </Col>
-                        <Col className="align-self-center">
-                          <Link
-                            to={`/produk/${item.product}`}
-                            style={{ textDecoration: "none", color: "black" }}
+                  <ListGroupItem key={item.product}>
+                    <Row>
+                      <Col>
+                        <img
+                          src={item.image}
+                          alt={item.product}
+                          width="150"
+                          className="align-self-center text-center m-2"
+                        />
+                      </Col>
+                      <Col className="align-self-center">
+                        <Link
+                          to={`/produk/${item.product}`}
+                          style={{
+                            textDecoration: "none",
+                            color: "black",
+                          }}
+                        >
+                          {item.name}
+                        </Link>
+                      </Col>
+                      <Col className="align-self-center text-center">
+                        <NumericFormat
+                          value={item.price}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"Rp "}
+                        />
+                      </Col>
+                      <Col className="align-self-center text-center">
+                        <div className="stockCounter d-inline text-center">
+                          <span
+                            className="btn btn-outline-light minus"
+                            onClick={() =>
+                              decrease(item.product, item.quantity)
+                            }
                           >
-                            {item.name}
-                          </Link>
-                        </Col>
-                        <Col className="align-self-center text-center">
-                          <NumericFormat
-                            value={item.price}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"Rp "}
+                            -
+                          </span>
+                          <input
+                            type="number"
+                            className="form-control count d-inline"
+                            value={item.quantity}
+                            readOnly
                           />
-                        </Col>
-                        <Col className="align-self-center text-center">
-                          <div className="stockCounter d-inline text-center">
-                            <span
-                              className="btn btn-outline-light minus"
-                              onClick={() =>
-                                decrease(item.product, item.quantity)
-                              }
-                            >
-                              -
-                            </span>
-                            <input
-                              type="number"
-                              className="form-control count d-inline"
-                              value={item.quantity}
-                              readOnly
-                            />
-                            <span
-                              className="btn btn-outline-light plus"
-                              onClick={() =>
-                                increase(
-                                  item.product,
-                                  item.quantity,
-                                  item.stock
-                                )
-                              }
-                            >
-                              +
-                            </span>
-                          </div>
-                        </Col>
-                        <Col className="align-self-center text-center" lg={1}>
-                          <div className="btn">
-                            <i
-                              className="fa-solid fa-trash-can fa-trash"
-                              onClick={() => removeHandler(item.product)}
-                            ></i>
-                          </div>
-                        </Col>
-                      </Row>
-                    </ListGroupItem>
-                  </Fragment>
+                          <span
+                            className="btn btn-outline-light plus"
+                            onClick={() =>
+                              increase(item.product, item.quantity, item.stock)
+                            }
+                          >
+                            +
+                          </span>
+                        </div>
+                      </Col>
+                      <Col className="align-self-center text-center" lg={1}>
+                        <div className="btn">
+                          <i
+                            className="fa-solid fa-trash-can fa-trash"
+                            onClick={() => removeHandler(item.product)}
+                          ></i>
+                        </div>
+                      </Col>
+                    </Row>
+                  </ListGroupItem>
                 ))}
               </ListGroup>
             </Col>
-            <Col>
+            <Col xs={12} lg={4}>
               <Card>
                 <Card.Header>Pesanan</Card.Header>
                 <Card.Body>
@@ -146,7 +147,7 @@ const Cart = () => {
                   </Row>
                   <hr />
                   <Row>
-                    <Col>Total Harga</Col>
+                    <Col>Total Harga Item</Col>
                     <Col>
                       :
                       <NumericFormat
@@ -166,7 +167,12 @@ const Cart = () => {
                     <Col>
                       <div className="text-center">
                         <LinkContainer to="/shipping">
-                          <Button className="btn btn-out">Check Out</Button>
+                          <Button
+                            className="btn btn-out"
+                            onClick={checkoutHandler}
+                          >
+                            Check Out
+                          </Button>
                         </LinkContainer>
                       </div>
                     </Col>
@@ -175,6 +181,7 @@ const Cart = () => {
               </Card>
             </Col>
           </Row>
+          <Row></Row>
         </Fragment>
       )}
     </div>
