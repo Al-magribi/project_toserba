@@ -303,7 +303,8 @@ small {
 
 .cart-screen,
 .shipping-screen,
-.confirm-screen {
+.confirm-screen,
+.payment-screen {
   font-size: 14px;
   margin-bottom: 12rem;
 }

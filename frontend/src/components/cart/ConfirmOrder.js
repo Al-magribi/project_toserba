@@ -5,12 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import MetaData from "../layouts/MetaData";
 import { NumericFormat } from "react-number-format";
 import Steps from "./Steps";
+import { useAlert } from "react-alert";
 
 const ConfirmOrder = () => {
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
+  const Alert = useAlert();
 
   // konfigurasi otomatisasi cek ongkir, dari sini
   // List Provinsi
@@ -73,9 +75,19 @@ const ConfirmOrder = () => {
     (quantity, item) => quantity + item.quantity * item.price,
     0
   );
+
   const totalPayment = cartItems.reduce(
     (quantity, item) => quantity + item.quantity * item.price,
     Number(endCost)
+  );
+
+  const NumericEndCost = (
+    <NumericFormat
+      value={endCost}
+      displayType={"text"}
+      thousandSeparator={true}
+      prefix={" Rp "}
+    />
   );
 
   const proceedToPayment = () => {
@@ -87,7 +99,11 @@ const ConfirmOrder = () => {
 
     sessionStorage.setItem("orderInfo", JSON.stringify(data));
 
-    navigate("/payment");
+    if (endCost) {
+      navigate("/payment");
+    } else {
+      Alert.error("Ongkir belum ada");
+    }
   };
 
   useEffect(() => {
@@ -175,7 +191,7 @@ const ConfirmOrder = () => {
           <Card>
             <Card.Header>Pengiriman</Card.Header>
             <Card.Body>
-              <span>Provinsi</span>
+              <span className="mb-1">Provinsi</span>
               <Form.Select onChange={(e) => getCities(e.target.value)}>
                 <option disabled="">-- Pilih Provinsi --</option>
                 {province.map((data) => (
@@ -185,7 +201,7 @@ const ConfirmOrder = () => {
                 ))}
               </Form.Select>
               <hr />
-              <span>Kota</span>
+              <span className="mb-1">Kota</span>
               <Form.Select onChange={(e) => costHandler(e.target.value)}>
                 <option disabled="">-- Pilih Kota --</option>
                 {city.map((data) => (
@@ -195,7 +211,7 @@ const ConfirmOrder = () => {
                 ))}
               </Form.Select>
               <hr />
-              <span>Kurir</span>
+              <span className="mb-1">Kurir</span>
               <Form.Select onChange={(e) => setEndCost(e.target.value)}>
                 <option disabled="">-- Pilih Kurir --</option>
                 {ongkir.map((data) => (
@@ -226,15 +242,7 @@ const ConfirmOrder = () => {
               <hr />
               <Row>
                 <Col>Ongkir</Col>
-                <Col>
-                  :
-                  <NumericFormat
-                    value={endCost}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={" Rp "}
-                  />
-                </Col>
+                <Col aria-required>:{NumericEndCost}</Col>
               </Row>
               <hr />
               <Row>
@@ -267,7 +275,7 @@ const ConfirmOrder = () => {
                 <Col>
                   <div className="text-center">
                     <Button className="btn btn-out" onClick={proceedToPayment}>
-                      Proces Pembayaran
+                      Proses Pembayaran
                     </Button>
                   </div>
                 </Col>

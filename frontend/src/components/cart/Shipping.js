@@ -38,6 +38,7 @@ const Shipping = () => {
                     type="text"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
+                    required
                   ></Form.Control>
                 </Form.Group>
                 <Form.Group>
@@ -46,6 +47,7 @@ const Shipping = () => {
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
+                    required
                   ></Form.Control>
                 </Form.Group>
                 <div className="mt-3 text-center my-2 d-grid gap-2">
