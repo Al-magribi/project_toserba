@@ -1,11 +1,12 @@
 const midtransClient = require("midtrans-client");
+const catchError = require("../middlewares/catchError");
 
 // Pembayaran midtrans
 exports.proceedPayment = (req, res, next) => {
   var snap = new midtransClient.Snap({
     isProduction: false,
     serverKey: process.env.SERVER_KEY,
-    clientKey: process.env.CLEINT_KEY,
+    clientKey: process.env.CLIENT_KEY,
   });
 
   snap
@@ -38,3 +39,26 @@ exports.proceedPayment = (req, res, next) => {
       });
     });
 };
+
+// Mendapatkan respone transaksi
+exports.getResponseTransaction = (req, res, next) => {
+  var snap = new midtransClient.Snap({
+    isProduction: false,
+    serverKey: process.env.SERVER_KEY,
+    clientKey: process.env.CLIENT_KEY,
+  });
+
+  snap.transaction.status(req.params.order_id).then((response) => {
+    res.status(200).json({
+      success: true,
+      response,
+    });
+  });
+};
+
+// Mengirim API ke frontend
+exports.midtransApi = catchError(async (req, res, next) => {
+  res.status(200).json({
+    clientKey: process.env.CLIENT_KEY,
+  });
+});
