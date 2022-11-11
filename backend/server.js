@@ -6,6 +6,7 @@ const databaseConnection = require("./config/config");
 const product = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 const ongkirRoutes = require("./routes/ongkirRoutes");
 const errorMiddleware = require("./middlewares/errors");
 const cloudinary = require("cloudinary").v2;
@@ -34,6 +35,7 @@ app.use("/api/toserba", product);
 app.use("/api/toserba", userRoutes);
 app.use("/api/toserba", orderRoutes);
 app.use("/api/toserba", ongkirRoutes);
+app.use("/api/toserba", paymentRoutes);
 
 // Koneksi database
 databaseConnection();

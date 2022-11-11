@@ -97,10 +97,9 @@ const ConfirmOrder = () => {
       totalPayment,
     };
 
-    sessionStorage.setItem("orderInfo", JSON.stringify(data));
-
     if (endCost) {
       navigate("/payment");
+      sessionStorage.setItem("orderInfo", JSON.stringify(data));
     } else {
       Alert.error("Ongkir belum ada");
     }
