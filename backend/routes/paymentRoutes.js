@@ -3,14 +3,13 @@ const {
   proceedPayment,
   midtransApi,
   getResponseTransaction,
+  paymentResponse,
 } = require("../controller/PaymentController");
 const { authenticatedUser } = require("../middlewares/auth");
 const router = express.Router();
 
-router.route("/payment").get(authenticatedUser, proceedPayment);
+router.route("/transaction").post(authenticatedUser, proceedPayment);
 router.route("/midtransapi").get(authenticatedUser, midtransApi);
-router
-  .route("/status/:order_id")
-  .get(authenticatedUser, getResponseTransaction);
+router.route("/status/:order_id").get(authenticatedUser, paymentResponse);
 
 module.exports = router;

@@ -27,8 +27,6 @@ const ConfirmOrder = () => {
   // hasil ongkir
   const [endCost, setEndCost] = useState("");
 
-  // const [total, setTotal] = useState("");
-
   // Mendapatkan list seluruh prosinsi,
   // data diambil dari backend
   const getProvinces = async () => {
@@ -99,7 +97,7 @@ const ConfirmOrder = () => {
 
     if (endCost) {
       navigate("/payment");
-      sessionStorage.setItem("orderInfo", JSON.stringify(data));
+      localStorage.setItem("orderInfo", JSON.stringify(data));
     } else {
       Alert.error("Ongkir belum ada");
     }
@@ -241,7 +239,7 @@ const ConfirmOrder = () => {
               <hr />
               <Row>
                 <Col>Ongkir</Col>
-                <Col aria-required>:{NumericEndCost}</Col>
+                <Col>:{NumericEndCost}</Col>
               </Row>
               <hr />
               <Row>

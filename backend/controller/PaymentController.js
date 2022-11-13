@@ -1,21 +1,46 @@
+const axios = require("axios");
 const midtransClient = require("midtrans-client");
 const catchError = require("../middlewares/catchError");
 
+// akses Core Api Midtrans
+let snap = new midtransClient.Snap({
+  isProduction: false,
+  serverKey: process.env.SERVER_KEY,
+  clientKey: process.env.CLIENT_KEY,
+});
+
 // Pembayaran midtrans
 exports.proceedPayment = (req, res, next) => {
-  var snap = new midtransClient.Snap({
-    isProduction: false,
-    serverKey: process.env.SERVER_KEY,
-    clientKey: process.env.CLIENT_KEY,
-  });
+  let parameter = {
+    transaction_details: {
+      order_id: req.body.order_id,
+      gross_amount: req.body.payment,
+    },
+    credit_card: {
+      secure: true,
+    },
+    name: req.body.name,
+    email: req.body.email,
+
+    enabled_payments: [
+      "credit_card",
+      "mandiri_clickpay",
+      "bca_klikbca",
+      "bca_klikpay",
+      "echannel",
+      "permata_va",
+      "bca_va",
+      "bni_va",
+      "other_va",
+      "gopay",
+      "indomaret",
+    ],
+  };
 
   snap
-    .createTransaction(req.body)
+    .createTransaction(parameter)
     .then((transaction) => {
       const dataPayment = {
-        id: transaction.rder_id,
-        productId: req.body.productId,
-        name: req.body.name,
         midtransResponse: JSON.stringify(transaction),
       };
 
@@ -40,17 +65,10 @@ exports.proceedPayment = (req, res, next) => {
     });
 };
 
-// Mendapatkan respone transaksi
-exports.getResponseTransaction = (req, res, next) => {
-  var snap = new midtransClient.Snap({
-    isProduction: false,
-    serverKey: process.env.SERVER_KEY,
-    clientKey: process.env.CLIENT_KEY,
-  });
-
-  snap.transaction.status(req.params.order_id).then((response) => {
+exports.paymentResponse = (req, res, next) => {
+  coreApi.transaction.status(req.params.order_id).then((response) => {
+    // do something to `response` object
     res.status(200).json({
-      success: true,
       response,
     });
   });

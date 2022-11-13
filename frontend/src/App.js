@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Container from "react-bootstrap/esm/Container";
 import Header from "./components/layouts/Header";
@@ -22,21 +22,10 @@ import Cart from "./components/cart/Cart";
 import Shipping from "./components/cart/Shipping";
 import ConfirmOrder from "./components/cart/ConfirmOrder";
 import Payment from "./components/cart/Payment";
-import axios from "axios";
 
 function App() {
-  const [clientApi, setClientApi] = useState("");
-
   useEffect(() => {
     store.dispatch(loadUser());
-
-    async function getClientKey() {
-      const { data } = await axios.get("/api/toserba/midtransapi");
-
-      setClientApi(data.clientKey);
-    }
-
-    getClientKey();
   }, []);
   return (
     <div>
