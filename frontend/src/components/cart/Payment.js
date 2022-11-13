@@ -4,10 +4,13 @@ import MetaData from "../layouts/MetaData";
 import Steps from "./Steps";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
+
+  const navigate = useNavigate();
 
   const order = {
     orderItems: cartItems,
@@ -21,6 +24,51 @@ const Payment = () => {
     order.totalPrice = orderInfo.totalPrice;
     order.totalPayment = orderInfo.totalPayment;
   }
+
+  // Proses pembayaran dengan metode snap midtrans
+  // pembuatan order id
+  const orderId = `TOSERBA-${parseInt(Math.floor(Math.random() * 10000))}`;
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization:
+          "Basic U0ItTWlkLXNlcnZlci1UdmdTNU45SHBZR2o4bGd4M2h2RlBTRmg6",
+      },
+    };
+
+    const data = {
+      order_id: orderId,
+      payment: orderInfo.totalPayment,
+      name: user.nama,
+      email: user.email,
+    };
+
+    const response = await axios.post("/api/toserba/transaction", data, config);
+    const token = response.data.token;
+
+    window.snap.pay(token, {
+      onSuccess: function(result) {
+        /* You may add your own implementation here */
+        console.log(result);
+        navigate("/");
+      },
+      onPending: function(result) {
+        /* You may add your own implementation here */
+        console.log(result);
+      },
+      onError: function(result) {
+        /* You may add your own implementation here */
+        console.log(result);
+      },
+      onClose: function() {
+        /* You may add your own implementation here */
+      },
+    });
+  };
 
   useEffect(() => {
     //change this to the script source you want to load, for example this is snap.js sandbox env
@@ -43,45 +91,6 @@ const Payment = () => {
     };
   }, []);
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-
-    const config = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization:
-          "Basic U0ItTWlkLXNlcnZlci1UdmdTNU45SHBZR2o4bGd4M2h2RlBTRmg6",
-      },
-    };
-
-    const data = {
-      order_id: "123456",
-      payment: orderInfo.totalPayment,
-    };
-
-    const response = await axios.post("/api/toserba/transaction", data, config);
-    const token = response.data.token;
-
-    window.snap.pay(token, {
-      onSuccess: function(result) {
-        /* You may add your own implementation here */
-        console.log(result);
-      },
-      onPending: function(result) {
-        /* You may add your own implementation here */
-        console.log(result);
-      },
-      onError: function(result) {
-        /* You may add your own implementation here */
-        console.log(result);
-      },
-      onClose: function() {
-        /* You may add your own implementation here */
-      },
-    });
-  };
-
   return (
     <div className="payment-screen">
       <MetaData title={"Pembayaran"} />
@@ -94,6 +103,15 @@ const Payment = () => {
               <Card.Header>Detail Pembayaran</Card.Header>
               <Card.Body>
                 <Form onSubmit={submitHandler}>
+                  <Form.Group>
+                    <Form.Label>Order isProduction</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="name"
+                      value={orderId}
+                      readOnly
+                    />
+                  </Form.Group>
                   <Form.Group>
                     <Form.Label>Nama</Form.Label>
                     <Form.Control

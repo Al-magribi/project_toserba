@@ -19,8 +19,10 @@ exports.proceedPayment = (req, res, next) => {
     credit_card: {
       secure: true,
     },
-    name: req.body.name,
-    email: req.body.email,
+    customer_details: {
+      first_name: req.body.name,
+      email: req.body.email,
+    },
 
     enabled_payments: [
       "credit_card",
@@ -66,12 +68,22 @@ exports.proceedPayment = (req, res, next) => {
 };
 
 exports.paymentResponse = (req, res, next) => {
-  coreApi.transaction.status(req.params.order_id).then((response) => {
-    // do something to `response` object
-    res.status(200).json({
-      response,
+  snap.transaction
+    .status(req.params.order_id)
+    .then((response) => {
+      // do something to `response` object
+      res.status(200).json({
+        success: true,
+        response,
+      });
+    })
+    .catch((error) => {
+      res.status(404).json({
+        success: false,
+        message: "order tidak ditemukan",
+        error: error.message,
+      });
     });
-  });
 };
 
 // Mengirim API ke frontend
