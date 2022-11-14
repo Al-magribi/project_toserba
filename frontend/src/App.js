@@ -22,6 +22,7 @@ import Cart from "./components/cart/Cart";
 import Shipping from "./components/cart/Shipping";
 import ConfirmOrder from "./components/cart/ConfirmOrder";
 import Payment from "./components/cart/Payment";
+import StatusPembayaran from "./components/cart/StatusPembayaran";
 
 function App() {
   useEffect(() => {
@@ -95,6 +96,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Payment />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/status"
+              element={
+                <ProtectedRoute>
+                  <StatusPembayaran />
                 </ProtectedRoute>
               }
             />

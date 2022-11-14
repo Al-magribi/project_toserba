@@ -5,12 +5,14 @@ import Steps from "./Steps";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "react-alert";
 
 const Payment = () => {
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
+  const Alert = useAlert();
 
   const order = {
     orderItems: cartItems,
@@ -33,10 +35,10 @@ const Payment = () => {
 
     const config = {
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
         Authorization:
           "Basic U0ItTWlkLXNlcnZlci1UdmdTNU45SHBZR2o4bGd4M2h2RlBTRmg6",
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
     };
 
@@ -52,20 +54,21 @@ const Payment = () => {
 
     window.snap.pay(token, {
       onSuccess: function(result) {
-        /* You may add your own implementation here */
-        console.log(result);
-        navigate("/");
+        localStorage.setItem("statusPembayaran", JSON.stringify(result));
+
+        document.querySelector("#pay_btn").disabled = true;
+        Alert.success("Pembayaran Berhasil");
       },
       onPending: function(result) {
-        /* You may add your own implementation here */
-        console.log(result);
+        localStorage.setItem("statusPembayaran", JSON.stringify(result));
+
+        Alert.error("Pembayaran tertunda");
       },
       onError: function(result) {
-        /* You may add your own implementation here */
-        console.log(result);
+        Alert.error(result);
       },
       onClose: function() {
-        /* You may add your own implementation here */
+        navigate("/");
       },
     });
   };
@@ -104,15 +107,6 @@ const Payment = () => {
               <Card.Body>
                 <Form onSubmit={submitHandler}>
                   <Form.Group>
-                    <Form.Label>Order isProduction</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="name"
-                      value={orderId}
-                      readOnly
-                    />
-                  </Form.Group>
-                  <Form.Group>
                     <Form.Label>Nama</Form.Label>
                     <Form.Control
                       type="text"
@@ -135,14 +129,19 @@ const Payment = () => {
                     <Form.Control
                       type="number"
                       name="name"
-                      value={orderInfo.totalPayment}
+                      value={orderInfo && orderInfo.totalPayment}
                       readOnly
                     />
                   </Form.Group>
+                  <br />
                   <Row>
                     <Col>
                       <div className="text-center">
-                        <Button type="submit" className="btn btn-login">
+                        <Button
+                          id="btn_pay"
+                          type="submit"
+                          className="btn btn-pay"
+                        >
                           Selesaikan Pembayaran
                         </Button>
                       </div>

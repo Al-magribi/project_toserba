@@ -23,7 +23,9 @@ exports.proceedPayment = (req, res, next) => {
       first_name: req.body.name,
       email: req.body.email,
     },
-
+    callbacks: {
+      finish: "http://localhost:3000/status",
+    },
     enabled_payments: [
       "credit_card",
       "mandiri_clickpay",
@@ -47,13 +49,11 @@ exports.proceedPayment = (req, res, next) => {
       };
 
       let transactionToken = transaction.token;
-      let transactionRedirectUrl = transaction.redirect_url;
 
       res.status(200).json({
         status: true,
         message: "berhasil",
         dataPayment,
-        url: transactionRedirectUrl,
         token: transactionToken,
       });
     })
