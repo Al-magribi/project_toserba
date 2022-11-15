@@ -4,21 +4,21 @@ const orderSchema = mongoose.Schema({
   detailPengiriman: {
     provinsi: {
       type: String,
-      required: true,
+      required: false,
     },
     kota: {
       type: String,
-      required: true,
+      required: false,
     },
-    alamat: {
+    address: {
       type: String,
       required: true,
     },
     kodePos: {
       type: String,
-      required: true,
+      required: false,
     },
-    tlp: {
+    phone: {
       type: String,
       required: true,
     },
@@ -30,23 +30,23 @@ const orderSchema = mongoose.Schema({
   },
   orderItems: [
     {
-      nama: {
+      name: {
         type: String,
         required: true,
       },
-      jml: {
+      quantity: {
         type: Number,
         required: true,
       },
-      gambar: {
+      image: {
         type: String,
         required: true,
       },
-      harga: {
+      price: {
         type: Number,
         required: true,
       },
-      produk: {
+      product: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "product",
@@ -54,6 +54,9 @@ const orderSchema = mongoose.Schema({
     },
   ],
   infoPembayaran: {
+    orderId: {
+      type: String,
+    },
     id: {
       type: String,
     },

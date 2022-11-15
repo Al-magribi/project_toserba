@@ -2,34 +2,35 @@ import React, { useEffect } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import MetaData from "../layouts/MetaData";
 import Steps from "./Steps";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
+import { clearError, createOrder } from "../../action/orderAction";
 
 const Payment = () => {
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
+  const { error } = useSelector((state) => state.newOrder);
 
-  const navigate = useNavigate();
   const Alert = useAlert();
-
-  const order = {
-    orderItems: cartItems,
-    shippingInfo,
-  };
+  const dispatch = useDispatch();
 
   // data dari sesion storage
+  const order = {
+    orderItems: cartItems,
+    detailPengiriman: shippingInfo,
+  };
+
   const orderInfo = JSON.parse(localStorage.getItem("orderInfo"));
   if (orderInfo) {
-    order.endCost = orderInfo.endCost;
-    order.totalPrice = orderInfo.totalPrice;
-    order.totalPayment = orderInfo.totalPayment;
+    order.ongkir = orderInfo.endCost;
+    order.hargaProduk = orderInfo.totalPrice;
+    order.totalHarga = orderInfo.totalPayment;
   }
 
   // Proses pembayaran dengan metode snap midtrans
   // pembuatan order id
-  const orderId = `TOSERBA-${parseInt(Math.floor(Math.random() * 10000))}`;
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -42,6 +43,7 @@ const Payment = () => {
       },
     };
 
+    const orderId = `TOSERBA-${parseInt(Math.floor(Math.random() * 10000))}`;
     const data = {
       order_id: orderId,
       payment: orderInfo.totalPayment,
@@ -54,26 +56,40 @@ const Payment = () => {
 
     window.snap.pay(token, {
       onSuccess: function(result) {
-        localStorage.setItem("statusPembayaran", JSON.stringify(result));
+        order.infoPembayaran = {
+          id: result && result.transaction_id,
+          status: result.transaction_status,
+        };
 
-        document.querySelector("#pay_btn").disabled = true;
-        Alert.success("Pembayaran Berhasil");
+        dispatch(createOrder(order));
       },
       onPending: function(result) {
-        localStorage.setItem("statusPembayaran", JSON.stringify(result));
+        /* You may add your own implementation here */
+        order.infoPembayaran = {
+          id: result.transaction_id,
+          status: result.transaction_status,
+        };
 
-        Alert.error("Pembayaran tertunda");
+        dispatch(createOrder(order));
       },
       onError: function(result) {
+        /* You may add your own implementation here */
         Alert.error(result);
       },
       onClose: function() {
-        navigate("/");
+        /* You may add your own implementation here */
+        Alert.error("you closed the popup without finishing the payment");
       },
     });
   };
 
   useEffect(() => {
+    if (error) {
+      Alert.error(error);
+
+      dispatch(clearError());
+    }
+
     //change this to the script source you want to load, for example this is snap.js sandbox env
     const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
     //change this according to your client-key
@@ -92,7 +108,7 @@ const Payment = () => {
     return () => {
       document.body.removeChild(scriptTag);
     };
-  }, []);
+  }, [Alert, clearError, dispatch]);
 
   return (
     <div className="payment-screen">

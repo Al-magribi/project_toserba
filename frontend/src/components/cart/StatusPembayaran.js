@@ -1,12 +1,44 @@
 import React from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { useAlert } from "react-alert";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { NumericFormat } from "react-number-format";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { createOrder } from "../../action/orderAction";
 import MetaData from "../layouts/MetaData";
 
 const StatusPembayaran = () => {
-  const data = JSON.parse(localStorage.getItem("statusPembayaran"));
+  const dispatch = useDispatch();
+  const Alert = useAlert();
+
+  const { cartItems, shippingInfo } = useSelector((state) => state.cart);
+  const { result } = useSelector((state) => state.newOrder);
   const { user } = useSelector((state) => state.auth);
+
+  const order = {
+    orderItems: cartItems,
+    detailPengiriman: shippingInfo,
+  };
+
+  const orderInfo = JSON.parse(localStorage.getItem("orderInfo"));
+  if (orderInfo) {
+    order.ongkir = orderInfo.endCost;
+    order.hargaProduk = orderInfo.totalPrice;
+    order.totalHarga = orderInfo.totalPayment;
+  }
+
+  order.infoPembayaran = {
+    id: result.transaction_id,
+    status: result.transaction_status,
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log(order);
+
+    dispatch(createOrder(order));
+
+    Alert.success("transaksi berhasil dikirim");
+  };
 
   return (
     <div className="status-screen mt-5 ">
@@ -22,13 +54,13 @@ const StatusPembayaran = () => {
                 </Row>
                 <hr />
                 <Row>
-                  <Col>Order Id</Col>
-                  <Col>: {data && data.order_id}</Col>
+                  <Col>Id Transaksi</Col>
+                  <Col>: {result.transaction_id}</Col>
                 </Row>
                 <hr />
                 <Row>
                   <Col>VA Bank</Col>
-                  <Col>: {data && data.bill_key}</Col>
+                  <Col>: {result.bill_key}</Col>
                 </Row>
                 <hr />
                 <Row>
@@ -36,7 +68,7 @@ const StatusPembayaran = () => {
                   <Col>
                     :{" "}
                     <NumericFormat
-                      value={data && data.gross_amount}
+                      value={result.gross_amount}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={" Rp "}
@@ -47,8 +79,14 @@ const StatusPembayaran = () => {
                 <Row>
                   <Col>Satus</Col>
                   <Col>
-                    : {data && data.transaction_status},{" "}
-                    {data && data.status_message}
+                    : {result.transaction_status}, {result.status_message}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Button onClick={submitHandler}>
+                      Kirim data transaksi
+                    </Button>
                   </Col>
                 </Row>
               </Card.Body>
