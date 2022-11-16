@@ -4,8 +4,12 @@ import {
   CREATE_NEW_ORDER_FAIL,
   CREATE_NEW_ORDER_REQUEST,
   CREATE_NEW_ORDER_SUCCESS,
+  MY_ORDERS_FAIL,
+  MY_ORDERS_REQUEST,
+  MY_ORDERS_SUCCESS,
 } from "../constants/orderConstants";
 
+// Create New order
 export const createOrder = (order) => async (dispatch) => {
   try {
     dispatch({ type: CREATE_NEW_ORDER_REQUEST });
@@ -29,6 +33,26 @@ export const createOrder = (order) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CREATE_NEW_ORDER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// My orders
+export const myOrders = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: MY_ORDERS_REQUEST,
+    });
+
+    const { data } = await axios.get("/api/toserba/orders/me");
+    dispatch({
+      type: MY_ORDERS_SUCCESS,
+      payload: data.orders,
+    });
+  } catch (error) {
+    dispatch({
+      type: MY_ORDERS_FAIL,
       payload: error.response.data.message,
     });
   }

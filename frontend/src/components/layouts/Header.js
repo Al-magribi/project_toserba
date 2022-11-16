@@ -78,15 +78,15 @@ const Header = () => {
                       <Dropdown.Item>Profile</Dropdown.Item>
                     </LinkContainer>
 
-                    {user && user.role === "admin" ? (
+                    {user && user.role === "admin" && (
                       <LinkContainer to="/dashboard">
                         <Dropdown.Item>Dasboard</Dropdown.Item>
                       </LinkContainer>
-                    ) : (
-                      <LinkContainer to="/orders/me">
-                        <Dropdown.Item>Pesanan</Dropdown.Item>
-                      </LinkContainer>
                     )}
+                    <LinkContainer to="/orders/me">
+                      <Dropdown.Item>Pesanan</Dropdown.Item>
+                    </LinkContainer>
+
                     <Dropdown.Item
                       className="text-danger"
                       onClick={logoutHandler}

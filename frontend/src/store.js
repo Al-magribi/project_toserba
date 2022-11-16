@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import { cartReducer } from "./reducers/cartReducer";
-import { orderReducer } from "./reducers/orderReducer";
+import { myOrdersReducer, orderReducer } from "./reducers/orderReducer";
 import {
   ProductDetailReducer,
   productsReducer,
@@ -21,6 +21,7 @@ const reducer = {
   forgotPassword: forgotPassword,
   cart: cartReducer,
   newOrder: orderReducer,
+  myOrder: myOrdersReducer,
 };
 
 const initialState = {

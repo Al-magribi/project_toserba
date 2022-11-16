@@ -305,7 +305,8 @@ small {
 .shipping-screen,
 .confirm-screen,
 .payment-screen,
-.status-screen {
+.status-screen,
+.order-screen {
   font-size: 14px;
   margin-bottom: 10rem;
 }
