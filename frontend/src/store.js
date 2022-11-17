@@ -1,7 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import { cartReducer } from "./reducers/cartReducer";
-import { myOrdersReducer, orderReducer } from "./reducers/orderReducer";
+import {
+  myOrdersReducer,
+  orderDetailsReducer,
+  orderReducer,
+} from "./reducers/orderReducer";
 import {
   ProductDetailReducer,
   productsReducer,
@@ -22,6 +26,7 @@ const reducer = {
   cart: cartReducer,
   newOrder: orderReducer,
   myOrder: myOrdersReducer,
+  orderDetails: orderDetailsReducer,
 };
 
 const initialState = {

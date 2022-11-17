@@ -5,6 +5,7 @@ import Loader from "../layouts/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
 import { myOrders, clearError } from "../../action/orderAction";
+import { Link } from "react-router-dom";
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -24,11 +25,6 @@ const Orders = () => {
   const setOrder = () => {
     const data = {
       columns: [
-        {
-          label: "Id Transaksi",
-          field: "transactionId",
-          sort: "asc",
-        },
         {
           label: "Order Id",
           field: "orderId",
@@ -55,8 +51,8 @@ const Orders = () => {
           sort: "asc",
         },
         {
-          label: "Update",
-          field: "update",
+          label: "Detail",
+          field: "detail",
           sort: "asc",
         },
       ],
@@ -66,7 +62,6 @@ const Orders = () => {
     orders &&
       orders.forEach((order) => {
         data.rows.push({
-          transactionId: order.infoPembayaran.id,
           orderId: order.infoPembayaran.order_id,
           quantity: order.orderItems.length,
           pembayaran: order.totalHarga,
@@ -78,7 +73,11 @@ const Orders = () => {
             ) : (
               <p style={{ color: "red" }}>{order.orderStatus}</p>
             ),
-          update: <i className="fa fa-eye"></i>,
+          detail: (
+            <Link to={`/order/${order._id}`}>
+              <i className="fa fa-eye"></i>
+            </Link>
+          ),
         });
       });
     return data;

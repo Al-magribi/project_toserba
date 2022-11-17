@@ -23,6 +23,7 @@ import Shipping from "./components/cart/Shipping";
 import ConfirmOrder from "./components/cart/ConfirmOrder";
 import Payment from "./components/cart/Payment";
 import StatusPembayaran from "./components/cart/StatusPembayaran";
+import OrderDetails from "./components/orders/OrderDetails";
 
 function App() {
   useEffect(() => {
@@ -63,13 +64,35 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/reset/:token" element={<NewPassword />} />
-            <Route path="/forgot" element={<ForgotPassword />} />
+            <Route
+              path="/reset/:token"
+              element={
+                <ProtectedRoute>
+                  <NewPassword />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/forgot"
+              element={
+                <ProtectedRoute>
+                  <ForgotPassword />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/orders/me"
               element={
                 <ProtectedRoute>
                   <Orders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/order/:id"
+              element={
+                <ProtectedRoute>
+                  <OrderDetails />
                 </ProtectedRoute>
               }
             />
