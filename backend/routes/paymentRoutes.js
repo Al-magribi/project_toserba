@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.route("/transaction").post(authenticatedUser, proceedPayment);
 router.route("/midtransapi").get(authenticatedUser, midtransApi);
-router.route("/satus/:order_id").get(authenticatedUser, paymentResponse);
+router.route("/status/:order_id").get(authenticatedUser, paymentResponse);
 
 module.exports = router;

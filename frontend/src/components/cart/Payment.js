@@ -57,11 +57,12 @@ const Payment = () => {
     window.snap.pay(token, {
       onSuccess: function(result) {
         order.infoPembayaran = {
+          order_id: result.order_id,
           id: result && result.transaction_id,
           status: result.transaction_status,
         };
-
         dispatch(createOrder(order));
+        localStorage.setItem("result", JSON.stringify(result));
       },
       onPending: function(result) {
         /* You may add your own implementation here */

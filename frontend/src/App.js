@@ -65,7 +65,14 @@ function App() {
             />
             <Route path="/reset/:token" element={<NewPassword />} />
             <Route path="/forgot" element={<ForgotPassword />} />
-            <Route path="/orders/me" element={<Orders />} />
+            <Route
+              path="/orders/me"
+              element={
+                <ProtectedRoute>
+                  <Orders />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/dashboard"
               element={

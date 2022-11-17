@@ -25,12 +25,17 @@ const Orders = () => {
     const data = {
       columns: [
         {
-          label: "Order Id",
-          field: "id",
+          label: "Id Transaksi",
+          field: "transactionId",
           sort: "asc",
         },
         {
-          label: "Jumlah Item",
+          label: "Order Id",
+          field: "orderId",
+          sort: "asc",
+        },
+        {
+          label: "Item",
           field: "quantity",
           sort: "asc",
         },
@@ -57,22 +62,26 @@ const Orders = () => {
       ],
       rows: [],
     };
-    orders.forEach((order) => {
-      data.rows.push({
-        id: order._id,
-        quantity: order.orderItems.length,
-        pembayaran: order.totalHarga,
-        paymentStatus: order.infoPembayaran.status,
-        status:
-          order.orderStatus &&
-          String(order.orderStatus).includes("Delivered") ? (
-            <p style={{ color: "green" }}>{order.orderStatus}</p>
-          ) : (
-            <p style={{ color: "red" }}>{order.orderStatus}</p>
-          ),
-        update: <i className="fa fa-eye"></i>,
+
+    orders &&
+      orders.forEach((order) => {
+        data.rows.push({
+          transactionId: order.infoPembayaran.id,
+          orderId: order.infoPembayaran.order_id,
+          quantity: order.orderItems.length,
+          pembayaran: order.totalHarga,
+          paymentStatus: order.infoPembayaran.status,
+          status:
+            order.orderStatus &&
+            String(order.orderStatus).includes("Delivered") ? (
+              <p style={{ color: "green" }}>{order.orderStatus}</p>
+            ) : (
+              <p style={{ color: "red" }}>{order.orderStatus}</p>
+            ),
+          update: <i className="fa fa-eye"></i>,
+        });
       });
-    });
+    return data;
   };
 
   return (
@@ -86,7 +95,7 @@ const Orders = () => {
       ) : (
         <MDBDataTable
           data={setOrder()}
-          className="px-3"
+          className="px-3 mt-2"
           bordered
           striped
           hover

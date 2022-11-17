@@ -58,7 +58,6 @@ exports.proceedPayment = (req, res, next) => {
       });
     })
     .catch((e) => {
-      console.log("Error occured:", e.message);
       res.status(400).json({
         status: false,
         message: "Pembayaran gagal",
