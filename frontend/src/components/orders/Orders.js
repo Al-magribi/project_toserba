@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
 import { myOrders, clearError } from "../../action/orderAction";
 import { Link } from "react-router-dom";
+import { NumericFormat } from "react-number-format";
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -64,7 +65,14 @@ const Orders = () => {
         data.rows.push({
           orderId: order.infoPembayaran.order_id,
           quantity: order.orderItems.length,
-          pembayaran: order.totalHarga,
+          pembayaran: (
+            <NumericFormat
+              value={order.totalHarga}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"Rp "}
+            />
+          ),
           paymentStatus: order.infoPembayaran.status,
           status:
             order.orderStatus &&
@@ -75,7 +83,9 @@ const Orders = () => {
             ),
           detail: (
             <Link to={`/order/${order._id}`}>
-              <i className="fa fa-eye"></i>
+              <button className="btn btn-primary">
+                <i className="fa fa-eye"></i>
+              </button>
             </Link>
           ),
         });
@@ -86,9 +96,7 @@ const Orders = () => {
   return (
     <div className="order-screen">
       <MetaData title={"Pesanan"} />
-
       <h3>Order</h3>
-
       {loading ? (
         <Loader />
       ) : (
