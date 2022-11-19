@@ -250,6 +250,19 @@ small {
   color: #e3e3e3;
 }
 
+.orange {
+  color: #fa9c23;
+}
+
+.yellow {
+  color: #fdcc0d;
+}
+
+.review_user {
+  font-size: 0.8rem;
+  color: grey;
+}
+
 /* Register Page */
 .avatar {
   display: inline-block;

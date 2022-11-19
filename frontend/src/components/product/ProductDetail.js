@@ -16,8 +16,7 @@ const ProductDetail = () => {
 
   // Pop-up Review product
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [rating, setRating] = useState(0);
 
   const Alert = useAlert();
   const dispatch = useDispatch();
@@ -26,6 +25,7 @@ const ProductDetail = () => {
   const { loading, product, error } = useSelector(
     (state) => state.productDetail
   );
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getProductDetail(params.id));
@@ -65,6 +65,52 @@ const ProductDetail = () => {
     }
   };
 
+  function reviewHandler() {
+    const stars = document.querySelectorAll(".star");
+
+    stars.forEach((star, index) => {
+      star.starValue = index + 1;
+
+      [("click", "mouseover", "mouseout")].forEach(function(e) {
+        star.addEventListener(e, showRatings);
+      });
+    });
+
+    function showRatings(e) {
+      stars.forEach((star, index) => {
+        if (e.type === "click") {
+          if (index < this.starValue) {
+            star.classList.add("orange");
+
+            setRating(this.starValue);
+          } else {
+            star.classList.remove("orange");
+          }
+        }
+
+        if (e.type === "mouseover") {
+          if (index < this.starValue) {
+            star.classList.add("yellow");
+          } else {
+            star.classList.remove("yellow");
+          }
+        }
+
+        if (e.type === "mouseout") {
+          star.classList.remove("yellow");
+        }
+      });
+    }
+  }
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => {
+    setShow(true);
+    console.log("first");
+  };
+  const handleShow2 = () => {
+    console.log("second");
+  };
   return (
     <Fragment>
       {loading ? (
@@ -154,15 +200,28 @@ const ProductDetail = () => {
               <hr />
               <Col>Penjual : {product.penjual}</Col>
               <Col>
-                <div className="btn-review-position">
-                  <Button
-                    type="button"
-                    className="btn btn-review"
-                    onClick={handleShow}
-                  >
-                    Beri Ulasan
-                  </Button>
-                </div>
+                {user ? (
+                  <div className="btn-review-position">
+                    <button
+                      type="button"
+                      className="btn btn-review"
+                      data-toggle="modal"
+                      data-target="#ratingModal"
+                      onClick={(e) => {
+                        handleShow();
+                        handleShow2();
+                        reviewHandler();
+                      }}
+                    >
+                      Beri Ulasan
+                    </button>
+                  </div>
+                ) : (
+                  <div className="alert alert-danger mt-5" type="alert">
+                    Login untuk melihat dan memberikan review
+                  </div>
+                )}
+
                 <Modal
                   show={show}
                   onHide={handleClose}
