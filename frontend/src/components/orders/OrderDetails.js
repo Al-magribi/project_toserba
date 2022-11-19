@@ -1,14 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearError, getOrderDetails } from "../../action/orderAction";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
 import Loader from "../layouts/Loader";
 import MetaData from "../layouts/MetaData";
 import { NumericFormat } from "react-number-format";
+import { useReactToPrint } from "react-to-print";
 
 const OrderDetails = () => {
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const dispatch = useDispatch();
   const Alert = useAlert();
   const params = useParams();
@@ -26,6 +38,7 @@ const OrderDetails = () => {
     hargaProduk,
     totalHarga,
     orderStatus,
+    createdAt,
   } = order;
 
   useEffect(() => {
@@ -58,7 +71,10 @@ const OrderDetails = () => {
                       <strong
                         className={
                           order.orderStatus &&
-                          String(order.orderStatus).includes("Delivered")
+                          String(order.orderStatus).includes(
+                            "DELIVERED",
+                            "COMPLETE"
+                          )
                             ? "greenColor"
                             : "redColor"
                         }
@@ -68,9 +84,19 @@ const OrderDetails = () => {
                     </p>
                   </Col>
                 </Row>
+                <Row>
+                  <Col>
+                    <button
+                      className="btn btn-outline-primary"
+                      onClick={handleShow}
+                    >
+                      INVOICE
+                    </button>
+                  </Col>
+                </Row>
               </Col>
               <Col>
-                <Card className="mx-2">
+                <Card className="m-2">
                   <Card.Header className="bg-primary text-white">
                     Detail Pengiriman
                   </Card.Header>
@@ -102,7 +128,7 @@ const OrderDetails = () => {
             </Row>
             <div className="mt-3">
               <Row>
-                <Col>
+                <Col sm={12} md={12} lg={6} className={"mb-3"}>
                   <Card className="mx-2">
                     <Card.Header className="bg-primary text-white">
                       <strong>Data Transaksi</strong>
@@ -129,7 +155,7 @@ const OrderDetails = () => {
                       </Row>
                       <hr />
                       <Row>
-                        <Col>Pembayaran</Col>
+                        <Col>Tagihan</Col>
                         <Col>
                           :{" "}
                           <NumericFormat
@@ -148,7 +174,7 @@ const OrderDetails = () => {
                     </Card.Body>
                   </Card>
                 </Col>
-                <Col>
+                <Col sm={12} md={12} lg={6}>
                   <Card className="mx-2">
                     <Card.Header className="bg-primary text-white">
                       <strong>Detail Pembelian</strong>
@@ -156,36 +182,41 @@ const OrderDetails = () => {
                     <Card.Body>
                       {orderItems &&
                         orderItems.map((order) => (
-                          <Row key={order.product}>
-                            <Col>
-                              <img
-                                src={order.image}
-                                alt={order.name}
-                                width="250"
-                              />
-                            </Col>
-
-                            <Col>
-                              <Row>
-                                <Col>{order.name}</Col>
-                              </Row>
-                              <hr />
-                              <Row>
-                                <Col>{order.quantity} item</Col>
-                              </Row>
-                              <hr />
-                              <Row>
-                                <Col>
-                                  <NumericFormat
-                                    value={hargaProduk}
-                                    displayType={"text"}
-                                    thousandSeparator={true}
-                                    prefix={"Rp "}
+                          <div className="my-2">
+                            <Row key={order.product}>
+                              <Col>
+                                <div className="align-items-center">
+                                  <img
+                                    src={order.image}
+                                    alt={order.name}
+                                    width="150"
+                                    className="rounded mx-auto my-auto d-block mt-4"
                                   />
-                                </Col>
-                              </Row>
-                            </Col>
-                          </Row>
+                                </div>
+                              </Col>
+                              <Col>
+                                <Row>
+                                  <Col>{order.name}</Col>
+                                </Row>
+                                <hr />
+                                <Row>
+                                  <Col>{order.quantity} item</Col>
+                                </Row>
+                                <hr />
+                                <Row>
+                                  <Col>
+                                    <NumericFormat
+                                      value={order.price * order.quantity}
+                                      displayType={"text"}
+                                      thousandSeparator={true}
+                                      prefix={"Rp "}
+                                    />
+                                  </Col>
+                                </Row>
+                              </Col>
+                            </Row>
+                            <hr />
+                          </div>
                         ))}
                     </Card.Body>
                   </Card>
@@ -194,6 +225,136 @@ const OrderDetails = () => {
             </div>
           </Container>
         )}
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          keyboard={false}
+          size="lg"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>INVOICE</Modal.Title>
+          </Modal.Header>
+          <Modal.Body ref={componentRef}>
+            <div className="container fs-6">
+              <div className="m-3">
+                <div className="d-flex align-items-center">
+                  <strong>TOSERBA</strong>
+                  <div className="ms-auto">
+                    <p className="text-end m-0">
+                      <strong>Invoice</strong>
+                    </p>
+                    <p className="text -end fst-italic m-0">
+                      {infoPembayaran && infoPembayaran.id}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="my-2">
+                  <p className="m-0 p-0">Pembeli : {user && user.nama}</p>
+                  <p className="m-0 p-0">
+                    Tanggal Terbit {String(createdAt).substring(0, 10)}
+                  </p>
+                </div>
+                <hr />
+                <div className="my-2 px-2">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Produk</th>
+                        <th scope="col">Jumlah</th>
+                        <th scope="col">Harga Satuan</th>
+                        <th scope="col">Total Harga</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orderItems &&
+                        orderItems.map((order) => (
+                          <tr key={order.product}>
+                            <td>{order.name}</td>
+                            <td>{order.quantity}</td>
+                            <td>{order.price}</td>
+                            <td>
+                              <NumericFormat
+                                value={order.price * order.quantity}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"Rp "}
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+                <hr />
+
+                <div
+                  className="d-flex align-items-center px-5"
+                  key={order.product}
+                >
+                  <p className="text-start m-0">
+                    <strong>
+                      {`Total Harga ${orderItems &&
+                        orderItems.reduce(
+                          (quantity, item) => quantity + Number(item.quantity),
+                          0
+                        )} item`}
+                    </strong>
+                  </p>
+                  <div className="ms-auto">
+                    <p className="text-end m-0">
+                      <strong>
+                        <NumericFormat
+                          value={hargaProduk}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"Rp "}
+                        />
+                      </strong>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="d-flex align-items-center px-5">
+                  <p className="text-start m-0">Total Ongkir</p>
+                  <div className="ms-auto">
+                    <p className="text-end m-0">
+                      <NumericFormat
+                        value={ongkir}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"Rp "}
+                      />
+                    </p>
+                  </div>
+                </div>
+                <div className="d-flex align-items-center px-5">
+                  <p className="text-start m-0">
+                    <strong>Total Tagihan</strong>
+                  </p>
+                  <div className="ms-auto">
+                    <p className="text-end m-0">
+                      <strong>
+                        <NumericFormat
+                          value={totalHarga}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"Rp "}
+                        />
+                      </strong>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={handlePrint}>
+              Print / Download
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </div>
   );

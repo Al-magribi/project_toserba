@@ -37,8 +37,8 @@ const Orders = () => {
           sort: "asc",
         },
         {
-          label: "Pembayaran",
-          field: "pembayaran",
+          label: "Tagihan",
+          field: "tagihan",
           sort: "asc",
         },
         {
@@ -65,7 +65,7 @@ const Orders = () => {
         data.rows.push({
           orderId: order.infoPembayaran.order_id,
           quantity: order.orderItems.length,
-          pembayaran: (
+          tagihan: (
             <NumericFormat
               value={order.totalHarga}
               displayType={"text"}
