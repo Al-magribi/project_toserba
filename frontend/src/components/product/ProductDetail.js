@@ -2,21 +2,32 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { clearError, getProductDetail } from "../../action/productsAction";
+import {
+  clearError,
+  createReview,
+  getProductDetail,
+} from "../../action/productsAction";
 import { Button, Col, Row, Modal, Carousel } from "react-bootstrap";
 import { NumericFormat } from "react-number-format";
 import MetaData from "../layouts/MetaData";
 import Loader from "../layouts/Loader";
 import { addToCart } from "../../action/cartAction";
+import * as FaIcons from "react-icons/fa";
 
 // submit Review popup Using Modal from bootstrap modul
+
+const colors = {
+  orange: "#FFBA5A",
+  grey: "#a9a9a9",
+};
 
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
 
   // Pop-up Review product
   const [show, setShow] = useState(false);
-  const [rating, setRating] = useState(0);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const Alert = useAlert();
   const dispatch = useDispatch();
@@ -65,52 +76,33 @@ const ProductDetail = () => {
     }
   };
 
-  function reviewHandler() {
-    const stars = document.querySelectorAll(".star");
+  // Star in review & comment
+  const stars = Array(5).fill(0);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [hover, setHover] = useState(undefined);
 
-    stars.forEach((star, index) => {
-      star.starValue = index + 1;
-
-      [("click", "mouseover", "mouseout")].forEach(function(e) {
-        star.addEventListener(e, showRatings);
-      });
-    });
-
-    function showRatings(e) {
-      stars.forEach((star, index) => {
-        if (e.type === "click") {
-          if (index < this.starValue) {
-            star.classList.add("orange");
-
-            setRating(this.starValue);
-          } else {
-            star.classList.remove("orange");
-          }
-        }
-
-        if (e.type === "mouseover") {
-          if (index < this.starValue) {
-            star.classList.add("yellow");
-          } else {
-            star.classList.remove("yellow");
-          }
-        }
-
-        if (e.type === "mouseout") {
-          star.classList.remove("yellow");
-        }
-      });
-    }
-  }
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => {
-    setShow(true);
-    console.log("first");
+  const clickHandler = (value) => {
+    setRating(value);
   };
-  const handleShow2 = () => {
-    console.log("second");
+
+  const mouseOver = (hoverColor) => {
+    setHover(hoverColor);
   };
+
+  const mouseOut = () => {
+    setHover(undefined);
+  };
+
+  const submitHandler = () => {
+    const data = new FormData();
+    data.set("rating", rating);
+    data.set("comment", comment);
+    data.set("productId", params.id);
+
+    dispatch(createReview(data));
+  };
+
   return (
     <Fragment>
       {loading ? (
@@ -202,19 +194,15 @@ const ProductDetail = () => {
               <Col>
                 {user ? (
                   <div className="btn-review-position">
-                    <button
+                    <Button
                       type="button"
                       className="btn btn-review"
                       data-toggle="modal"
                       data-target="#ratingModal"
-                      onClick={(e) => {
-                        handleShow();
-                        handleShow2();
-                        reviewHandler();
-                      }}
+                      onClick={handleShow}
                     >
                       Beri Ulasan
-                    </button>
+                    </Button>
                   </div>
                 ) : (
                   <div className="alert alert-danger mt-5" type="alert">
@@ -233,33 +221,39 @@ const ProductDetail = () => {
                     <Modal.Title>Kasih ulasan mu</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <ul className="stars">
-                      <li className="star">
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li className="star">
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li className="star">
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li className="star">
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li className="star">
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
+                    <div style={style.container}>
+                      <div style={style.stars}>
+                        {stars.map((_, index) => {
+                          return (
+                            <FaIcons.FaStar
+                              key={index}
+                              size={80}
+                              style={{ marginRight: 10, cursor: "pointer" }}
+                              onClick={() => clickHandler(index + 1)}
+                              onMouseOver={() => mouseOver(index + 1)}
+                              color={
+                                hover > index ? colors.orange : colors.grey
+                              }
+                              onMouseOut={mouseOut}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+
                     <textarea
                       name="review"
                       className="form-control mt-3"
+                      onChange={(e) => setComment(e.target.value)}
                     ></textarea>
                   </Modal.Body>
                   <Modal.Footer>
                     <Button className="btn btn-secondary" onClick={handleClose}>
                       Batal
                     </Button>
-                    <Button className="btn btn-review">Kirim</Button>
+                    <Button className="btn btn-review" onClick={submitHandler}>
+                      Kirim
+                    </Button>
                   </Modal.Footer>
                 </Modal>
               </Col>
@@ -269,6 +263,18 @@ const ProductDetail = () => {
       )}
     </Fragment>
   );
+};
+
+const style = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  stars: {
+    display: "flex",
+    flexDirection: "row",
+  },
 };
 
 export default ProductDetail;

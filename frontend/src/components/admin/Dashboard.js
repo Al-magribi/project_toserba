@@ -1,7 +1,12 @@
-import React from "react";
+import React, { Fragment } from "react";
+import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return (
+    <Fragment>
+      <Sidebar />
+    </Fragment>
+  );
 };
 
 export default Dashboard;

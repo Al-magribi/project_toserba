@@ -398,6 +398,10 @@ small {
   margin-right: -1px;
 }
 
+/* Admin sidebar */
+.siderbar {
+  margin-left: 3%;
+}
 /* Footer */
 .footer {
   font-size: 10px;

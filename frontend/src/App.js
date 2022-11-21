@@ -35,11 +35,16 @@ function App() {
         <Header />
         <Container>
           <Routes>
+            {/* Login / Register */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/daftar" element={<Register />} />
+
+            {/* Home */}
             <Route path="/" element={<Home />} />
             <Route path="/search/:keyword" element={<Home />} />
             <Route path="/produk/:id" element={<ProductDetail />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/daftar" element={<Register />} />
+
+            {/* User */}
             <Route
               path="/me"
               element={
@@ -96,14 +101,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
+
             <Route path="/cart" element={<Cart />} />
             <Route
               path="/shipping"
@@ -139,6 +137,16 @@ function App() {
             />
           </Routes>
         </Container>
+        <Routes>
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
         <Footer />
       </BrowserRouter>
     </div>
