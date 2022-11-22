@@ -1,11 +1,15 @@
 import { useAlert } from "react-alert";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import Search from "./Search";
 import { Container, Navbar, Nav, Dropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../action/usersAction";
+// Menu Bar in admin's side
+import * as FaIcons from "react-icons/fa";
+import { sidebarData } from "./SidebarData";
+import { IconContext } from "react-icons/lib";
 
 const Header = () => {
   // Konfigurasi aplikasi
@@ -21,13 +25,44 @@ const Header = () => {
     Alert.success("Berhasil Logout");
   };
 
+  // Menu bar
+  const [show, setShow] = useState(false);
+
+  const showHandler = () => setShow(!show);
+  const closeHandler = () => setShow(false);
+
   return (
     <Fragment>
-      <Navbar bg="primary" expand="lg">
+      <Navbar bg="primary" expand="lg" sticky="top">
         <Container>
-          <LinkContainer to="/" className="Brand">
-            <Navbar.Brand className="text-white">TOSERBA</Navbar.Brand>
-          </LinkContainer>
+          {user && user.role === "admin" ? (
+            <IconContext.Provider value={{ color: "#fff" }}>
+              <div className="navbar">
+                <Link to="#" className="menu-bars">
+                  <FaIcons.FaBars onClick={showHandler} />
+                </Link>
+              </div>
+              <nav className={show ? "nav-menu active" : "nav-menu"}>
+                <ul className="nav-menu-items" onClick={closeHandler}>
+                  {sidebarData.map((item, index) => {
+                    return (
+                      <li key={index} className={item.cName}>
+                        <Link to={item.path}>
+                          {item.icon}
+                          <span className="span-icon"> {item.title}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
+            </IconContext.Provider>
+          ) : (
+            <LinkContainer to="/" className="Brand">
+              <Navbar.Brand className="text-white">TOSERBA</Navbar.Brand>
+            </LinkContainer>
+          )}
+
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
             className="text-white"

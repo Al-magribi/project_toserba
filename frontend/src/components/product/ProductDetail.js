@@ -13,12 +13,15 @@ import MetaData from "../layouts/MetaData";
 import Loader from "../layouts/Loader";
 import { addToCart } from "../../action/cartAction";
 import * as FaIcons from "react-icons/fa";
+import { NEW_REVIEW_RESET } from "../../constants/productsConstant";
+import ListReviews from "../layouts/ListReviews";
 
 // submit Review popup Using Modal from bootstrap modul
 
 const colors = {
   orange: "#FFBA5A",
   grey: "#a9a9a9",
+  yellow: "#FFFF00",
 };
 
 const ProductDetail = () => {
@@ -37,14 +40,9 @@ const ProductDetail = () => {
     (state) => state.productDetail
   );
   const { user } = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    dispatch(getProductDetail(params.id));
-    if (error) {
-      Alert.error(error);
-      dispatch(clearError());
-    }
-  }, [dispatch, params.id, Alert, error]);
+  const { error: reviewError, success } = useSelector(
+    (state) => state.newReview
+  );
 
   // kirim produk ke cart
   const toCart = () => {
@@ -95,14 +93,34 @@ const ProductDetail = () => {
   };
 
   const submitHandler = () => {
-    const data = new FormData();
-    data.set("rating", rating);
-    data.set("comment", comment);
-    data.set("productId", params.id);
+    const fromData = new FormData();
 
-    dispatch(createReview(data));
+    fromData.set("rating", rating);
+    fromData.set("comment", comment);
+    fromData.set("productId", params.id);
+    fromData.set("name", user.nama);
+
+    dispatch(createReview(fromData));
+
+    setShow(false);
   };
 
+  useEffect(() => {
+    dispatch(getProductDetail(params.id));
+    if (error) {
+      Alert.error(error);
+      dispatch(clearError());
+    }
+    if (reviewError) {
+      Alert.error(reviewError);
+      dispatch(clearError());
+    }
+
+    if (success) {
+      Alert.success("Reivew posted successfully");
+      dispatch({ type: NEW_REVIEW_RESET });
+    }
+  }, [dispatch, params.id, Alert, error, success]);
   return (
     <Fragment>
       {loading ? (
@@ -232,7 +250,9 @@ const ProductDetail = () => {
                               onClick={() => clickHandler(index + 1)}
                               onMouseOver={() => mouseOver(index + 1)}
                               color={
-                                hover > index ? colors.orange : colors.grey
+                                hover || rating > index
+                                  ? colors.orange || colors.yellow
+                                  : colors.grey
                               }
                               onMouseOut={mouseOut}
                             />
@@ -245,7 +265,7 @@ const ProductDetail = () => {
                       name="review"
                       className="form-control mt-3"
                       onChange={(e) => setComment(e.target.value)}
-                    ></textarea>
+                    />
                   </Modal.Body>
                   <Modal.Footer>
                     <Button className="btn btn-secondary" onClick={handleClose}>
@@ -257,6 +277,13 @@ const ProductDetail = () => {
                   </Modal.Footer>
                 </Modal>
               </Col>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              {product.reviews && product.reviews.length > 0 && (
+                <ListReviews reviews={product.reviews} />
+              )}
             </Col>
           </Row>
         </Fragment>

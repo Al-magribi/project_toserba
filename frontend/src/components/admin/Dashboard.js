@@ -1,10 +1,9 @@
 import React, { Fragment } from "react";
-import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
   return (
     <Fragment>
-      <Sidebar />
+      <div>dashboard</div>
     </Fragment>
   );
 };

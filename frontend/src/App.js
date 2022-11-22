@@ -24,6 +24,7 @@ import ConfirmOrder from "./components/cart/ConfirmOrder";
 import Payment from "./components/cart/Payment";
 import StatusPembayaran from "./components/cart/StatusPembayaran";
 import OrderDetails from "./components/orders/OrderDetails";
+import NoMatch from "./components/layouts/NoMatch";
 
 function App() {
   useEffect(() => {
@@ -42,7 +43,7 @@ function App() {
             {/* Home */}
             <Route path="/" element={<Home />} />
             <Route path="/search/:keyword" element={<Home />} />
-            <Route path="/produk/:id" element={<ProductDetail />} />
+            <Route index path="/produk/:id" element={<ProductDetail />} />
 
             {/* User */}
             <Route
@@ -135,18 +136,17 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NoMatch />} />
           </Routes>
         </Container>
-        <Routes>
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
         <Footer />
       </BrowserRouter>
     </div>

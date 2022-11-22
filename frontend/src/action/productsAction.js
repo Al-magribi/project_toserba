@@ -80,7 +80,7 @@ export const createReview = (dataReview) => async (dispatch) => {
 
     dispatch({
       type: NEW_REVIEW_SUCCESS,
-      payload: data.successs,
+      payload: data.success,
     });
   } catch (error) {
     dispatch({

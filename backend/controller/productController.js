@@ -107,7 +107,7 @@ exports.createReview = catchError(async (req, res, next) => {
   //  review Object
   const review = {
     user: req.user._id,
-    nama: req.user.nama,
+    name: req.user.nama,
     rating: Number(rating),
     comment,
   };
@@ -132,7 +132,7 @@ exports.createReview = catchError(async (req, res, next) => {
   }
 
   product.rating =
-    product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+    product.reviews.reduce((acc, item) => acc + item.rating, 0) /
     product.reviews.length;
 
   await product.save({ validateBeforeSave: false });

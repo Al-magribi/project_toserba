@@ -5,8 +5,14 @@ import * as VsIcons from "react-icons/vsc";
 
 export const sidebarData = [
   {
+    title: "Home",
+    path: "/",
+    icon: <FaIcons.FaHome />,
+    cName: "nav-text",
+  },
+  {
     title: "Dashboard",
-    path: "/dasboard",
+    path: "/dashboard",
     icon: <FaIcons.FaTachometerAlt />,
     cName: "nav-text",
   },
