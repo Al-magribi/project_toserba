@@ -3,6 +3,7 @@ const catchError = require("../middlewares/catchError");
 const ErrorHandler = require("../utilities/ErrorHandler");
 const Product = require("../models/product");
 const product = require("../models/product");
+const { trusted } = require("mongoose");
 
 // Menambahkan produk baru => Admin
 // Creating product
@@ -36,6 +37,17 @@ exports.updateProduct = catchError(async (req, res) => {
   res.status(200).json({
     success: true,
     product,
+  });
+});
+
+// Menampilkan semua produk => Admin
+// Get all products => Admin
+exports.getAdminProduct = catchError(async (req, res) => {
+  const products = await Product.find();
+
+  res.status(200).json({
+    success: true,
+    products,
   });
 });
 

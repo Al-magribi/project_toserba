@@ -7,6 +7,7 @@ import {
   orderReducer,
 } from "./reducers/orderReducer";
 import {
+  createProductReducer,
   ProductDetailReducer,
   productsReducer,
   reviewReducer,
@@ -29,6 +30,7 @@ const reducer = {
   myOrder: myOrdersReducer,
   orderDetails: orderDetailsReducer,
   newReview: reviewReducer,
+  newProduct: createProductReducer,
 };
 
 const initialState = {

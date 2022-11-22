@@ -1,4 +1,11 @@
 import {
+  ADMIN_PRODUCTS_REQUEST,
+  ADMIN_PRODUCTS_SUCCESS,
+  ADMIN_PRODUCTS_FAIL,
+  CREATE_PRODUCTS_REQUEST,
+  CREATE_PRODUCTS_SUCCESS,
+  CREATE_PRODUCTS_RESET,
+  CREATE_PRODUCTS_FAIL,
   ALL_PRODUCTS_REQUEST,
   ALL_PRODUCTS_SUCCESS,
   ALL_PRODUCTS_FAIL,
@@ -16,10 +23,12 @@ import {
 export const productsReducer = (state = { products: [] }, action) => {
   switch (action.type) {
     case ALL_PRODUCTS_REQUEST:
+    case ADMIN_PRODUCTS_REQUEST:
       return {
         loading: true,
         products: [],
       };
+
     case ALL_PRODUCTS_SUCCESS:
       return {
         loading: false,
@@ -28,7 +37,15 @@ export const productsReducer = (state = { products: [] }, action) => {
         productPerPage: action.payload.productPerPage,
         filteredProductsCount: action.payload.filteredProductsCount,
       };
+
+    case ADMIN_PRODUCTS_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload,
+      };
+
     case ALL_PRODUCTS_FAIL:
+    case ADMIN_PRODUCTS_FAIL:
       return {
         loading: false,
         error: action.payload,
@@ -72,7 +89,46 @@ export const ProductDetailReducer = (state = { product: {} }, action) => {
       return state;
   }
 };
+// Create new product
+export const createProductReducer = (state = { product: {} }, action) => {
+  switch (action.type) {
+    case CREATE_PRODUCTS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
 
+    case CREATE_PRODUCTS_SUCCESS:
+      return {
+        ...state,
+        success: action.payload.success,
+        product: action.payload.product,
+      };
+
+    case CREATE_PRODUCTS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case CREATE_PRODUCTS_RESET:
+      return {
+        ...state,
+        success: false,
+      };
+
+    case CLEAR_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Create new / update review
 export const reviewReducer = (state = {}, action) => {
   switch (action.type) {
     case NEW_REVIEW_REQUEST:

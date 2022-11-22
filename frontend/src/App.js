@@ -25,6 +25,7 @@ import Payment from "./components/cart/Payment";
 import StatusPembayaran from "./components/cart/StatusPembayaran";
 import OrderDetails from "./components/orders/OrderDetails";
 import NoMatch from "./components/layouts/NoMatch";
+import ProductsList from "./components/admin/ProductsList";
 
 function App() {
   useEffect(() => {
@@ -36,6 +37,7 @@ function App() {
         <Header />
         <Container>
           <Routes>
+            <Route path="*" element={<NoMatch />} />
             {/* Login / Register */}
             <Route path="/login" element={<Login />} />
             <Route path="/daftar" element={<Register />} />
@@ -86,6 +88,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* Orders */}
             <Route
               path="/orders/me"
               element={
@@ -136,15 +139,23 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* admin section */}
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute isAdmin={true}>
                   <Dashboard />
                 </ProtectedRoute>
               }
             />
-            <Route path="*" element={<NoMatch />} />
+            <Route
+              path="/admin/products"
+              element={
+                <ProtectedRoute isAdmin={true}>
+                  <ProductsList />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Container>
         <Footer />

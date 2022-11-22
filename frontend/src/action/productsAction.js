@@ -3,6 +3,9 @@ import {
   ALL_PRODUCTS_FAIL,
   ALL_PRODUCTS_REQUEST,
   ALL_PRODUCTS_SUCCESS,
+  ADMIN_PRODUCTS_FAIL,
+  ADMIN_PRODUCTS_REQUEST,
+  ADMIN_PRODUCTS_SUCCESS,
   CLEAR_ERROR,
   NEW_REVIEW_FAIL,
   NEW_REVIEW_REQUEST,
@@ -10,6 +13,9 @@ import {
   PRODUCT_DETAIL_FAIL,
   PRODUCT_DETAIL_REQUEST,
   PRODUCT_DETAIL_SUCCESS,
+  CREATE_PRODUCTS_FAIL,
+  CREATE_PRODUCTS_REQUEST,
+  CREATE_PRODUCTS_SUCCESS,
 } from "../constants/productsConstant";
 
 // Action All products
@@ -63,6 +69,35 @@ export const getProductDetail = (id) => async (dispatch) => {
   }
 };
 
+// Create new product
+export const createProducts = (productData) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_PRODUCTS_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = axios.post(
+      "/api/toserba/admin/produk/tambah",
+      productData,
+      config
+    );
+
+    dispatch({
+      type: CREATE_PRODUCTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: CREATE_PRODUCTS_FAIL,
+      error: error.response.data.message,
+    });
+  }
+};
+
 // New Review
 export const createReview = (dataReview) => async (dispatch) => {
   try {
@@ -86,6 +121,26 @@ export const createReview = (dataReview) => async (dispatch) => {
     dispatch({
       type: NEW_REVIEW_FAIL,
       error: error.response.data.message,
+    });
+  }
+};
+
+// Admin Section
+// get products
+export const getAdminProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: ADMIN_PRODUCTS_REQUEST });
+
+    const { data } = await axios.get(`/api/toserba/admin/products`);
+
+    dispatch({
+      type: ADMIN_PRODUCTS_SUCCESS,
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_PRODUCTS_FAIL,
+      payload: error.response.data.message,
     });
   }
 };
