@@ -24,7 +24,7 @@ const Dashboard = () => {
   return (
     <Fragment>
       <MetaData title={"Admin Dashboard"} />
-      <div className="dashboard">
+      <div className="admin-screen">
         <div className="row">
           <div className="col-12 col-md-1"></div>
 

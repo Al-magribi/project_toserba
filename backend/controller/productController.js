@@ -7,12 +7,11 @@ const cloudinary = require("cloudinary");
 // Menambahkan produk baru => Admin
 // Creating product
 exports.addNewProduct = catchError(async (req, res) => {
-  console.log(req.body.gambar);
-  let images = [];
+  let gambar = [];
   if (typeof req.body.gambar === "string") {
-    images.push(req.body.gambar);
+    gambar.push(req.body.gambar);
   } else {
-    images = req.body.gambar;
+    gambar = req.body.gambar;
   }
 
   let imagesLink = [];
@@ -40,13 +39,35 @@ exports.addNewProduct = catchError(async (req, res) => {
 
 // Mengupdate produk => Admin
 // Updating product
-exports.updateProduct = catchError(async (req, res) => {
+exports.updateProduct = catchError(async (req, res, next) => {
   let product = await Product.findById(req.params.id);
 
   if (!product) {
-    res.status(404).json({
-      success: false,
-    });
+    return next(new ErrorHandler("Produk tidak ditemukan", 404));
+  }
+
+  let gambar = [];
+  if (typeof req.body.gambar === "string") {
+    gambar.push(req.body.gambar);
+  } else {
+    gambar = req.body.gambar;
+  }
+
+  if (gambar !== undefined) {
+    let imagesLink = [];
+
+    for (let i = 0; i < gambar.length; i++) {
+      const result = await cloudinary.v2.uploader.upload(gambar[i], {
+        folder: "Products",
+      });
+
+      imagesLink.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
+
+    req.body.gambar = imagesLink;
   }
 
   product = await Product.findByIdAndUpdate(req.params.id, req.body, {

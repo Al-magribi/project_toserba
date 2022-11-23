@@ -27,6 +27,7 @@ import OrderDetails from "./components/orders/OrderDetails";
 import NoMatch from "./components/layouts/NoMatch";
 import ProductsList from "./components/admin/ProductsList";
 import CreateProducts from "./components/admin/CreateProducts";
+import UpdateProduct from "./components/admin/UpdateProduct";
 
 function App() {
   useEffect(() => {
@@ -162,6 +163,14 @@ function App() {
               element={
                 <ProtectedRoute isAdmin={true}>
                   <CreateProducts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/update/:id"
+              element={
+                <ProtectedRoute isAdmin={true}>
+                  <UpdateProduct />
                 </ProtectedRoute>
               }
             />

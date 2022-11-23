@@ -1,12 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { clearError, createProducts } from "../../action/productsAction";
-import { CREATE_PRODUCTS_RESET } from "../../constants/productsConstant";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  clearError,
+  updateProduct,
+  getProductDetail,
+} from "../../action/productsAction";
+import { UPDATE_PRODUCT_RESET } from "../../constants/productsConstant";
 import MetaData from "../layouts/MetaData";
 
-const CreateProducts = () => {
+const UpdateProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [des, setDes] = useState("");
@@ -15,29 +19,60 @@ const CreateProducts = () => {
   const [seller, setSeller] = useState("");
   const [images, setImages] = useState([]);
   const [prevImg, setPrviewImg] = useState([]);
+  const [oldImage, setOldImage] = useState([]);
   const [weight, setWeight] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const Alert = useAlert();
+  const params = useParams();
 
-  const { error, loading, success } = useSelector((state) => state.newProduct);
+  const { error: updateError, loading, isUpdated } = useSelector(
+    (state) => state.product
+  );
+  const { error, product } = useSelector((state) => state.productDetail);
+  const productId = params.id;
 
   useEffect(() => {
-    if (success) {
-      Alert.success("Produk berhasil ditambahkan");
-
-      dispatch({ type: CREATE_PRODUCTS_RESET });
-
-      navigate("/admin/tambah");
-
-      window.location.reload(false);
+    if (product && product._id !== productId) {
+      dispatch(getProductDetail(productId));
+    } else {
+      setName(product.nama);
+      setPrice(product.harga);
+      setDes(product.deskripsi);
+      setCategory(product.ketegori);
+      setStock(product.stok);
+      setSeller(product.penjual);
+      setOldImage(product.gambar);
+      setWeight(product.berat);
     }
+
+    if (isUpdated) {
+      navigate("/admin/products");
+      Alert.success("Product is updated");
+
+      dispatch({ type: UPDATE_PRODUCT_RESET });
+    }
+
     if (error) {
       Alert.error(error);
       dispatch(clearError());
     }
-  }, [error, dispatch, success, navigate]);
+
+    if (updateError) {
+      Alert.error(updateError);
+      dispatch(clearError());
+    }
+  }, [
+    error,
+    Alert,
+    dispatch,
+    isUpdated,
+    navigate,
+    updateError,
+    product,
+    productId,
+  ]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -55,7 +90,7 @@ const CreateProducts = () => {
       formData.append("gambar", image);
     });
 
-    dispatch(createProducts(formData));
+    dispatch(updateProduct(product._id, formData));
   };
 
   const onChange = (e) => {
@@ -63,6 +98,7 @@ const CreateProducts = () => {
 
     setPrviewImg([]);
     setImages([]);
+    setOldImage([]);
 
     files.forEach((file) => {
       const reader = new FileReader();
@@ -80,7 +116,7 @@ const CreateProducts = () => {
 
   return (
     <Fragment>
-      <MetaData title={"Tambah Produk"} />
+      <MetaData title={"Update Produk"} />
       <div className="admin-screen">
         <div className="container">
           <form
@@ -102,6 +138,18 @@ const CreateProducts = () => {
                     multiple
                   />
                 </div>
+                {oldImage &&
+                  oldImage.map((img) => (
+                    <img
+                      src={img.url}
+                      key={img.url}
+                      alt="Preview"
+                      className="mt-3 mr-2"
+                      width="250"
+                      height="248"
+                    />
+                  ))}
+
                 {prevImg.map((img) => (
                   <img
                     src={img}
@@ -227,7 +275,7 @@ const CreateProducts = () => {
                         className="btn btn-primary"
                         disabled={loading ? true : false}
                       >
-                        Create
+                        Update
                       </button>
                     </div>
                   </div>
@@ -241,4 +289,4 @@ const CreateProducts = () => {
   );
 };
 
-export default CreateProducts;
+export default UpdateProduct;

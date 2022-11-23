@@ -16,6 +16,12 @@ import {
   CREATE_PRODUCTS_FAIL,
   CREATE_PRODUCTS_REQUEST,
   CREATE_PRODUCTS_SUCCESS,
+  DELETE_PRODUCT_FAIL,
+  DELETE_PRODUCT_REQUEST,
+  DELETE_PRODUCT_SUCCESS,
+  UPDATE_PRODUCT_FAIL,
+  UPDATE_PRODUCT_REQUEST,
+  UPDATE_PRODUCT_SUCCESS,
 } from "../constants/productsConstant";
 
 // Action All products
@@ -69,7 +75,7 @@ export const getProductDetail = (id) => async (dispatch) => {
   }
 };
 
-// Create new product
+// Create new product => Admin
 export const createProducts = (productData) => async (dispatch) => {
   try {
     dispatch({ type: CREATE_PRODUCTS_REQUEST });
@@ -93,6 +99,58 @@ export const createProducts = (productData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CREATE_PRODUCTS_FAIL,
+      error: error.response.data.message,
+    });
+  }
+};
+
+// Delete Product => Admin
+export const deleteProduct = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_PRODUCT_REQUEST });
+
+    const { data } = await axios.delete(
+      `/api/toserba/admin/produk/hapus/${id}`
+    );
+
+    dispatch({
+      type: DELETE_PRODUCT_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_PRODUCT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Update Product => Admin
+export const updateProduct = (id, productData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: UPDATE_PRODUCT_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/toserba/admin/produk/update/${id}`,
+      config,
+      productData
+    );
+
+    dispatch({
+      type: UPDATE_PRODUCT_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PRODUCT_FAIL,
       error: error.response.data.message,
     });
   }

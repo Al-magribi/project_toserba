@@ -4,18 +4,27 @@ import { MDBDataTable } from "mdbreact";
 import Loader from "../layouts/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
-import { getAdminProducts, clearError } from "../../action/productsAction";
+import {
+  getAdminProducts,
+  clearError,
+  deleteProduct,
+} from "../../action/productsAction";
 import * as GrIcons from "react-icons/gr";
 import { Col, Row } from "react-bootstrap";
 import "./index.css";
+import { DELETE_PRODUCT_RESET } from "../../constants/productsConstant";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
   const Alert = useAlert();
+  const navigate = useNavigate();
 
   const { error, loading, products } = useSelector((state) => state.products);
+  const { error: deleteError, isDeleted } = useSelector(
+    (state) => state.product
+  );
 
   useEffect(() => {
     dispatch(getAdminProducts());
@@ -24,7 +33,18 @@ const ProductsList = () => {
       Alert.error(error);
       dispatch(clearError());
     }
-  }, [Alert, dispatch, error]);
+
+    if (deleteError) {
+      Alert.error(deleteError);
+      dispatch(clearError());
+    }
+
+    if (isDeleted) {
+      Alert.success("Produk berhasil dihapus");
+      navigate("/admin/products");
+      dispatch({ type: DELETE_PRODUCT_RESET });
+    }
+  }, [Alert, dispatch, error, isDeleted, deleteError]);
 
   const setProducts = () => {
     const data = {
@@ -74,12 +94,15 @@ const ProductsList = () => {
           action: (
             <div>
               <Link
-                to={`/admin/produk/update/${product._id}`}
+                to={`/admin/update/${product._id}`}
                 className="btn btn-primary py-1 px-2 btn-action text-white"
               >
                 <GrIcons.GrUpdate />
               </Link>
-              <button className="btn btn-danger py-1 px-2 ">
+              <button
+                className="btn btn-danger py-1 px-2 "
+                onClick={() => deleteHandler(product._id)}
+              >
                 <GrIcons.GrTrash />
               </button>
             </div>
@@ -88,6 +111,11 @@ const ProductsList = () => {
       });
     return data;
   };
+
+  const deleteHandler = (id) => {
+    dispatch(deleteProduct(id));
+  };
+
   return (
     <Fragment>
       <MetaData title={"Produk"} />
