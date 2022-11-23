@@ -2,12 +2,32 @@ const APIfeatures = require("../utilities/apiFeatures");
 const catchError = require("../middlewares/catchError");
 const ErrorHandler = require("../utilities/ErrorHandler");
 const Product = require("../models/product");
-const product = require("../models/product");
-const { trusted } = require("mongoose");
+const cloudinary = require("cloudinary");
 
 // Menambahkan produk baru => Admin
 // Creating product
 exports.addNewProduct = catchError(async (req, res) => {
+  console.log(req.body.gambar);
+  let images = [];
+  if (typeof req.body.gambar === "string") {
+    images.push(req.body.gambar);
+  } else {
+    images = req.body.gambar;
+  }
+
+  let imagesLink = [];
+  for (let i = 0; i < gambar.length; i++) {
+    const result = await cloudinary.v2.uploader.upload(gambar[i], {
+      folder: "Products",
+    });
+
+    imagesLink.push({
+      public_id: result.public_id,
+      url: result.secure_url,
+    });
+  }
+
+  req.body.gambar = imagesLink;
   req.body.user = req.user.id;
 
   const product = await Product.create(req.body);

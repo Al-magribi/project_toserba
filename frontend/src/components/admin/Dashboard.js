@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import MetaData from "../layouts/MetaData";
 import { Link } from "react-router-dom";
-import "./Admin.css";
+import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getAdminProducts } from "../../action/productsAction";
 

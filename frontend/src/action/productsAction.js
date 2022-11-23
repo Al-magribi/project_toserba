@@ -80,7 +80,7 @@ export const createProducts = (productData) => async (dispatch) => {
       },
     };
 
-    const { data } = axios.post(
+    const { data } = await axios.post(
       "/api/toserba/admin/produk/tambah",
       productData,
       config

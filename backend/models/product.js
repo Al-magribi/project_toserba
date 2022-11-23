@@ -47,6 +47,7 @@ const productSchema = new mongoose.Schema({
         "Sports",
         "Outdoor",
         "Home",
+        "Others",
       ],
     },
   },
