@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import { cartReducer } from "./reducers/cartReducer";
 import {
+  getOrdersReducer,
   myOrdersReducer,
   orderDetailsReducer,
   orderReducer,
@@ -33,6 +34,7 @@ const reducer = {
   myOrder: myOrdersReducer,
   orderDetails: orderDetailsReducer,
   newReview: reviewReducer,
+  allOrders: getOrdersReducer,
 };
 
 const initialState = {

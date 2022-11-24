@@ -1,5 +1,8 @@
 import axios from "axios";
 import {
+  ADMIN_ORDERS_FAIL,
+  ADMIN_ORDERS_REQUEST,
+  ADMIN_ORDERS_SUCCESS,
   CLEAR_ERRORS,
   CREATE_NEW_ORDER_FAIL,
   CREATE_NEW_ORDER_REQUEST,
@@ -36,6 +39,29 @@ export const createOrder = (order) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CREATE_NEW_ORDER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Get orders Admin
+export const getOrders = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: ADMIN_ORDERS_REQUEST,
+    });
+
+    const { data } = await axios.get("/api/toserba/admin/orders");
+    console.log(data);
+
+    dispatch({
+      type: ADMIN_ORDERS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error.response);
+    dispatch({
+      type: ADMIN_ORDERS_FAIL,
       payload: error.response.data.message,
     });
   }

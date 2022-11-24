@@ -212,11 +212,8 @@ const UpdateProduct = () => {
                         id="category"
                         className="form-select"
                         onChange={(e) => setCategory(e.target.value)}
-                        defaultValue={"DEFAULT"}
                       >
-                        <option disabled value={"DEFAULT"}>
-                          Pilih Jenis Produk
-                        </option>
+                        <option>Pilih Jenis Produk</option>
                         <option value="Electronics">Elektronik</option>
                         <option value="Cameras">Kamera</option>
                         <option value="Laptops">Laptop</option>

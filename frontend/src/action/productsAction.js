@@ -140,8 +140,8 @@ export const updateProduct = (id, productData) => async (dispatch) => {
 
     const { data } = await axios.put(
       `/api/toserba/admin/produk/update/${id}`,
-      config,
-      productData
+      productData,
+      config
     );
 
     dispatch({

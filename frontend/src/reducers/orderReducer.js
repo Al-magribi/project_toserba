@@ -1,4 +1,7 @@
 import {
+  ADMIN_ORDERS_FAIL,
+  ADMIN_ORDERS_REQUEST,
+  ADMIN_ORDERS_SUCCESS,
   CLEAR_ERRORS,
   CREATE_NEW_ORDER_FAIL,
   CREATE_NEW_ORDER_REQUEST,
@@ -11,6 +14,37 @@ import {
   ORDER_DETAILS_SUCCESS,
 } from "../constants/orderConstants";
 
+// Get All Order
+export const getOrdersReducer = (state = { orders: [] }, action) => {
+  switch (action.type) {
+    case ADMIN_ORDERS_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case ADMIN_ORDERS_SUCCESS:
+      return {
+        loading: false,
+        orders: action.payload.orders,
+        totalAmount: action.payload.totalHarga,
+      };
+
+    case ADMIN_ORDERS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        loading: false,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
 // Create new Order
 export const orderReducer = (state = {}, action) => {
   switch (action.payload) {
