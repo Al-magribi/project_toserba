@@ -13,7 +13,63 @@ import {
   ORDER_DETAILS_FAIL,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
+  UPDATE_ORDERS_FAIL,
+  UPDATE_ORDERS_REQUEST,
+  UPDATE_ORDERS_SUCCESS,
 } from "../constants/orderConstants";
+
+// Get orders => Admin
+export const getOrders = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: ADMIN_ORDERS_REQUEST,
+    });
+
+    const { data } = await axios.get("/api/toserba/admin/orders");
+
+    dispatch({
+      type: ADMIN_ORDERS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error.response);
+    dispatch({
+      type: ADMIN_ORDERS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Update Order => Admin
+export const updateOrder = (id, orderData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: UPDATE_ORDERS_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/toserba/admin/order/${id}`,
+      orderData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_ORDERS_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_ORDERS_FAIL,
+      error: error.response.data.message,
+    });
+  }
+};
 
 // Create New order
 export const createOrder = (order) => async (dispatch) => {
@@ -39,29 +95,6 @@ export const createOrder = (order) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CREATE_NEW_ORDER_FAIL,
-      payload: error.response.data.message,
-    });
-  }
-};
-
-// Get orders Admin
-export const getOrders = () => async (dispatch) => {
-  try {
-    dispatch({
-      type: ADMIN_ORDERS_REQUEST,
-    });
-
-    const { data } = await axios.get("/api/toserba/admin/orders");
-    console.log(data);
-
-    dispatch({
-      type: ADMIN_ORDERS_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    console.log(error.response);
-    dispatch({
-      type: ADMIN_ORDERS_FAIL,
       payload: error.response.data.message,
     });
   }

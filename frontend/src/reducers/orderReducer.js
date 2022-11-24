@@ -2,6 +2,10 @@ import {
   ADMIN_ORDERS_FAIL,
   ADMIN_ORDERS_REQUEST,
   ADMIN_ORDERS_SUCCESS,
+  UPDATE_ORDERS_FAIL,
+  UPDATE_ORDERS_REQUEST,
+  UPDATE_ORDERS_RESET,
+  UPDATE_ORDERS_SUCCESS,
   CLEAR_ERRORS,
   CREATE_NEW_ORDER_FAIL,
   CREATE_NEW_ORDER_REQUEST,
@@ -45,6 +49,46 @@ export const getOrdersReducer = (state = { orders: [] }, action) => {
       return state;
   }
 };
+
+// Update & Delete Order
+export const orderUpDelReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_ORDERS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UPDATE_ORDERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isUpdated: action.payload,
+      };
+
+    case UPDATE_ORDERS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case UPDATE_ORDERS_RESET:
+      return {
+        ...state,
+        isUpdated: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
 // Create new Order
 export const orderReducer = (state = {}, action) => {
   switch (action.payload) {

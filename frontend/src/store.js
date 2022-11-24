@@ -6,6 +6,7 @@ import {
   myOrdersReducer,
   orderDetailsReducer,
   orderReducer,
+  orderUpDelReducer,
 } from "./reducers/orderReducer";
 import {
   createProductReducer,
@@ -33,6 +34,7 @@ const reducer = {
   newOrder: orderReducer,
   myOrder: myOrdersReducer,
   orderDetails: orderDetailsReducer,
+  order: orderUpDelReducer,
   newReview: reviewReducer,
   allOrders: getOrdersReducer,
 };

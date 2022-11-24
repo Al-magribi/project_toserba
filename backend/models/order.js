@@ -88,6 +88,9 @@ const orderSchema = mongoose.Schema({
     required: true,
     default: "Processing",
   },
+  resi: {
+    type: String,
+  },
   deliveredAt: {
     type: Date,
   },

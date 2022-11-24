@@ -98,28 +98,30 @@ exports.deleteOrder = catchError(async (req, res, next) => {
 exports.updateOrder = catchError(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
 
-  if (order.orderStatus === "Dikirim") {
+  if (order.orderStatus === "Delivered") {
     return next(new ErrorHandler("Pesanan sudah terkirim", 400));
   } else {
     order.orderItems.forEach(async (item) => {
-      await updateStock(item.produk, item.jml);
+      await updateStock(item.product, item.quantity);
     });
 
     order.orderStatus = req.body.status;
+    order.resi = req.body.resi;
     order.deliveredAt = Date.now();
 
     await order.save();
 
     res.status(200).json({
       success: true,
-      message: "Status berhasil dirubah",
+      message: "Order berhasil diperbarui",
     });
   }
 });
-async function updateStock(id, jml) {
+
+async function updateStock(id, quantity) {
   const product = await Product.findById(id);
 
-  product.stok = product.stok - jml;
+  product.stok = product.stok - quantity;
 
   await product.save({ validateBeforeSave: false });
 }
