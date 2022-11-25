@@ -16,8 +16,10 @@ import {
   reviewReducer,
 } from "./reducers/productsReducer";
 import {
+  allUsersReducer,
   authReducer,
   forgotPassword,
+  userDetailReducer,
   userReducer,
 } from "./reducers/usersReducer";
 // import { composeWithDevTools } from "redux-devtools-extension";
@@ -29,6 +31,8 @@ const reducer = {
   product: productReducer,
   auth: authReducer,
   user: userReducer,
+  users: allUsersReducer,
+  userDetail: userDetailReducer,
   forgotPassword: forgotPassword,
   cart: cartReducer,
   newOrder: orderReducer,

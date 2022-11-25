@@ -16,7 +16,7 @@ const UpdatePassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { error, isUpdate, loading } = useSelector((state) => state.user);
+  const { error, isUpdated, loading } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (error) {
@@ -24,7 +24,7 @@ const UpdatePassword = () => {
       dispatch(clearError());
     }
 
-    if (isUpdate) {
+    if (isUpdated) {
       Alert.success("Password Berhasil diperbarui");
 
       navigate("/me");
@@ -33,7 +33,7 @@ const UpdatePassword = () => {
         type: UPDATE_PASSWORD_RESET,
       });
     }
-  }, [dispatch, Alert, error, isUpdate, navigate]);
+  }, [dispatch, Alert, error, isUpdated, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

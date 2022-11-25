@@ -1,9 +1,15 @@
 import axios from "axios";
 import {
   CLEAR_ERROR,
+  DETAIL_USER_FAIL,
+  DETAIL_USER_REQUEST,
+  DETAIL_USER_SUCCESS,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
+  GET_USERS_FAIL,
+  GET_USERS_REQUEST,
+  GET_USERS_SUCCESS,
   LOAD_USER_FAIL,
   LOAD_USER_REQUEST,
   LOAD_USER_SUCCESS,
@@ -23,7 +29,81 @@ import {
   UPDATE_PROFILE_FAIL,
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
+  UPDATE_USER_FAIL,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
 } from "../constants/userConstants";
+
+// get users => admin
+export const getUsers = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_USERS_REQUEST,
+    });
+
+    const { data } = await axios.get("/api/toserba/admin/users");
+
+    dispatch({
+      type: GET_USERS_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_USERS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Update user => Admin
+export const updateUser = (id, userData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_USER_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/toserba/admin/user/update/${id}`,
+      userData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_USER_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Get user detail
+export const userDetail = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DETAIL_USER_REQUEST,
+    });
+
+    const { data } = await axios.get(`/api/toserba/admin/user/${id}`);
+
+    dispatch({
+      type: DETAIL_USER_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: DETAIL_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 
 // Login Action
 export const login = (email, password) => async (dispatch) => {
@@ -54,7 +134,7 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-// Register ACtion
+// Register Action
 export const register = (userData) => async (dispatch) => {
   try {
     dispatch({

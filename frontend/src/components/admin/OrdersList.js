@@ -6,6 +6,7 @@ import {
   getOrders,
   getOrderDetails,
   updateOrder,
+  deleteOrder,
 } from "../../action/orderAction";
 import * as GrIcons from "react-icons/gr";
 import { NumericFormat } from "react-number-format";
@@ -13,7 +14,10 @@ import MetaData from "../layouts/MetaData";
 import { MDBDataTable } from "mdbreact";
 import Loader from "../layouts/Loader";
 import { Col, Row, Modal, Button, Form } from "react-bootstrap";
-import { UPDATE_ORDERS_RESET } from "../../constants/orderConstants";
+import {
+  DELETE_ORDERS_RESET,
+  UPDATE_ORDERS_RESET,
+} from "../../constants/orderConstants";
 
 const OrdersList = () => {
   const dispatch = useDispatch();
@@ -21,7 +25,7 @@ const OrdersList = () => {
 
   const { error, loading, orders } = useSelector((state) => state.allOrders);
   const { order = {} } = useSelector((state) => state.orderDetails);
-  const { isUpdated } = useSelector((state) => state.order);
+  const { isUpdated, isDeleted } = useSelector((state) => state.order);
 
   const { detailPengiriman, orderItems, user, ongkir } = order;
 
@@ -35,10 +39,15 @@ const OrdersList = () => {
 
   const handleShow = (id) => {
     dispatch(getOrderDetails(id));
+
     setShow(true);
   };
 
   const handleClose = () => setShow(false);
+
+  const deleteHandler = (id) => {
+    dispatch(deleteOrder(id));
+  };
 
   const updateStatus = (id) => {
     const formData = new FormData();
@@ -62,7 +71,12 @@ const OrdersList = () => {
       Alert.success("Order Berhasil diperbarui");
       dispatch({ type: UPDATE_ORDERS_RESET });
     }
-  }, [dispatch, Alert, Error, isUpdated]);
+
+    if (isDeleted) {
+      Alert.success("Order berhasil dihapus");
+      dispatch({ type: DELETE_ORDERS_RESET });
+    }
+  }, [dispatch, Alert, Error, isUpdated, isDeleted]);
 
   const setOrders = () => {
     const data = {
@@ -113,8 +127,31 @@ const OrdersList = () => {
               prefix={"Rp "}
             />
           ),
-          paymentStatus: order.infoPembayaran.status,
-          orderStatus: order.orderStatus,
+          paymentStatus: (
+            <strong>
+              {order.infoPembayaran.status &&
+              order.infoPembayaran.status === "settlement" ? (
+                <p style={{ color: "green" }}>
+                  <strong>{order.infoPembayaran.status}</strong>
+                </p>
+              ) : (
+                <p style={{ color: "red" }}>
+                  <strong>{order.infoPembayaran.status}</strong>
+                </p>
+              )}
+            </strong>
+          ),
+          orderStatus:
+            order.orderStatus &&
+            String(order.orderStatus).includes("Delivered") ? (
+              <p style={{ color: "green" }}>
+                <strong>{order.orderStatus}</strong>
+              </p>
+            ) : (
+              <p style={{ color: "red" }}>
+                <strong>{order.orderStatus}</strong>
+              </p>
+            ),
           action: (
             <div>
               <button
@@ -123,7 +160,10 @@ const OrdersList = () => {
               >
                 <GrIcons.GrUpdate />
               </button>
-              <button className="btn btn-danger py-1 px-2 ">
+              <button
+                className="btn btn-danger py-1 px-2"
+                onClick={() => deleteHandler(order._id)}
+              >
                 <GrIcons.GrTrash />
               </button>
             </div>
@@ -135,7 +175,7 @@ const OrdersList = () => {
 
   return (
     <Fragment>
-      <MetaData title={"Produk"} />
+      <MetaData title={"Pesanan"} />
       {loading ? (
         <Loader />
       ) : (
@@ -191,17 +231,25 @@ const OrdersList = () => {
                 orderItems.map((item) => (
                   <div key={item.product}>
                     <Row className="mb-3">
-                      <Col>{item.name}</Col>
-                    </Row>
-                    <Row>
-                      <Col>{item.quantity} pcs</Col>
                       <Col>
-                        <NumericFormat
-                          value={item.price}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"Rp "}
-                        />
+                        <strong>{item.name}</strong>
+                      </Col>
+                    </Row>
+                    <Row className="text-end">
+                      <Col>
+                        <i>{item.quantity} pcs</i>
+                      </Col>
+                      <Col>
+                        <strong>
+                          <i>
+                            <NumericFormat
+                              value={item.price}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"Rp "}
+                            />
+                          </i>
+                        </strong>
                       </Col>
                     </Row>
                     <hr />

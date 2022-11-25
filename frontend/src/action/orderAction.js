@@ -7,6 +7,9 @@ import {
   CREATE_NEW_ORDER_FAIL,
   CREATE_NEW_ORDER_REQUEST,
   CREATE_NEW_ORDER_SUCCESS,
+  DELETE_ORDERS_FAIL,
+  DELETE_ORDERS_REQUEST,
+  DELETE_ORDERS_SUCCESS,
   MY_ORDERS_FAIL,
   MY_ORDERS_REQUEST,
   MY_ORDERS_SUCCESS,
@@ -67,6 +70,29 @@ export const updateOrder = (id, orderData) => async (dispatch) => {
     dispatch({
       type: UPDATE_ORDERS_FAIL,
       error: error.response.data.message,
+    });
+  }
+};
+
+// Delete order => Admin
+export const deleteOrder = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DELETE_ORDERS_REQUEST,
+    });
+
+    const { data } = await axios.delete(
+      `/api/toserba/admin/order/delete/${id}`
+    );
+
+    dispatch({
+      type: DELETE_ORDERS_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_ORDERS_FAIL,
+      payload: error.response.data.message,
     });
   }
 };

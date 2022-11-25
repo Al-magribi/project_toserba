@@ -21,7 +21,7 @@ const UpdateProfile = () => {
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
-  const { error, isUpdate, loading } = useSelector((state) => state.user);
+  const { error, isUpdated, loading } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (user) {
@@ -35,7 +35,7 @@ const UpdateProfile = () => {
       dispatch(clearError());
     }
 
-    if (isUpdate) {
+    if (isUpdated) {
       Alert.success("Berhasil diperbarui");
       dispatch(loadUser());
       navigate("/me");
@@ -44,7 +44,7 @@ const UpdateProfile = () => {
         type: UPDATE_PROFILE_RESET,
       });
     }
-  }, [dispatch, Alert, error, user, isUpdate, navigate]);
+  }, [dispatch, Alert, error, user, isUpdated, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

@@ -29,6 +29,7 @@ import ProductsList from "./components/admin/ProductsList";
 import CreateProducts from "./components/admin/CreateProducts";
 import UpdateProduct from "./components/admin/UpdateProduct";
 import OrdersList from "./components/admin/OrdersList";
+import UsersList from "./components/admin/UsersList";
 
 function App() {
   useEffect(() => {
@@ -180,6 +181,14 @@ function App() {
               element={
                 <ProtectedRoute isAdmin={true}>
                   <OrdersList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute isAdmin={true}>
+                  <UsersList />
                 </ProtectedRoute>
               }
             />
