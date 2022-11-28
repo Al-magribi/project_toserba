@@ -30,11 +30,17 @@ import CreateProducts from "./components/admin/CreateProducts";
 import UpdateProduct from "./components/admin/UpdateProduct";
 import OrdersList from "./components/admin/OrdersList";
 import UsersList from "./components/admin/UsersList";
+import Reviews from "./components/admin/Reviews";
+import { useSelector } from "react-redux";
 
 function App() {
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
+
+  const { user, authenticatedUser, loading } = useSelector(
+    (state) => state.auth
+  );
   return (
     <div>
       <BrowserRouter>
@@ -84,14 +90,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/forgot"
-              element={
-                <ProtectedRoute>
-                  <ForgotPassword />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/forgot" element={<ForgotPassword />} />
             {/* Orders */}
             <Route
               path="/orders/me"
@@ -192,9 +191,19 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/admin/reviews"
+              element={
+                <ProtectedRoute isAdmin={true}>
+                  <Reviews />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Container>
-        <Footer />
+        {!loading && (!authenticatedUser || user.role !== "admin") && (
+          <Footer />
+        )}
       </BrowserRouter>
     </div>
   );

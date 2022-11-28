@@ -2,7 +2,6 @@ const express = require("express");
 const {
   proceedPayment,
   midtransApi,
-  getResponseTransaction,
   paymentResponse,
 } = require("../controller/PaymentController");
 const { authenticatedUser } = require("../middlewares/auth");

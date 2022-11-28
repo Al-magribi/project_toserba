@@ -5,6 +5,7 @@ import { MDBDataTable } from "mdbreact";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearError,
+  deleteUser,
   getUsers,
   updateUser,
   userDetail,
@@ -19,7 +20,7 @@ const UsersList = () => {
   const Alert = useAlert();
 
   const { error, loading, users } = useSelector((state) => state.users);
-  const { isUpdated } = useSelector((state) => state.user);
+  const { isUpdated, isDeleted } = useSelector((state) => state.user);
   const { user } = useSelector((state) => state.userDetail);
 
   // update user
@@ -47,6 +48,10 @@ const UsersList = () => {
     setShow(false);
   };
 
+  const deleteHandler = (id) => {
+    dispatch(deleteUser(id));
+  };
+
   useEffect(() => {
     dispatch(getUsers());
 
@@ -58,8 +63,13 @@ const UsersList = () => {
       Alert.success("User berhasil di update");
       dispatch({ type: UPDATE_USER_RESET });
     }
+
+    if (isDeleted) {
+      Alert.success("user berhasil dihapus");
+    }
+
     dispatch(clearError());
-  }, [dispatch, error, Alert, isUpdated]);
+  }, [dispatch, error, Alert, isUpdated, isDeleted]);
 
   const setUsers = () => {
     const data = {
@@ -107,7 +117,10 @@ const UsersList = () => {
               >
                 <GrIcons.GrUpdate />
               </button>
-              <button className="btn btn-danger py-1 px-2">
+              <button
+                className="btn btn-danger py-1 px-2"
+                onClick={() => deleteHandler(user._id)}
+              >
                 <GrIcons.GrTrash />
               </button>
             </div>
@@ -120,17 +133,20 @@ const UsersList = () => {
   return (
     <Fragment>
       <MetaData title={"User"} />
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className="admin-screen">
-          <Row>
-            <Col>
-              <MDBDataTable data={setUsers()} bordered striped hover />
-            </Col>
-          </Row>
-        </div>
-      )}
+      <h3>Pengguna</h3>
+      <div className="admin-screen">
+        {loading ? (
+          <Loader />
+        ) : (
+          <div className="admin-screen">
+            <Row>
+              <Col>
+                <MDBDataTable data={setUsers()} bordered striped hover />
+              </Col>
+            </Row>
+          </div>
+        )}
+      </div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>

@@ -4,11 +4,15 @@ import { Link } from "react-router-dom";
 import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getAdminProducts } from "../../action/productsAction";
+import { getUsers } from "../../action/usersAction";
+import { getOrders } from "../../action/orderAction";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
 
   const { products } = useSelector((state) => state.products);
+  const { users } = useSelector((state) => state.users);
+  const { orders } = useSelector((state) => state.allOrders);
 
   let outOfStock = 0;
   products.forEach((product) => {
@@ -19,12 +23,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getAdminProducts());
+
+    dispatch(getUsers());
+
+    dispatch(getOrders());
   }, [dispatch]);
 
   return (
     <Fragment>
       <MetaData title={"Admin Dashboard"} />
-      <div className="admin-screen">
+      <div>
         <div className="row">
           <div className="col-12 col-md-1"></div>
 
@@ -71,7 +79,7 @@ const Dashboard = () => {
                     <div className="card-body">
                       <div className="text-center card-font-size">
                         Orders
-                        <br /> <b>13</b>
+                        <br /> <b>{orders && orders.length}</b>
                       </div>
                     </div>
                     <Link
@@ -91,7 +99,7 @@ const Dashboard = () => {
                     <div className="card-body">
                       <div className="text-center card-font-size">
                         Users
-                        <br /> <b>12</b>
+                        <br /> <b>{users && users.length}</b>
                       </div>
                     </div>
                     <Link

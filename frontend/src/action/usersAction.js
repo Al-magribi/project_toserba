@@ -32,8 +32,12 @@ import {
   UPDATE_USER_FAIL,
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
+  DELETE_USER_FAIL,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
 } from "../constants/userConstants";
 
+// Admin Section
 // get users => admin
 export const getUsers = () => async (dispatch) => {
   try {
@@ -105,6 +109,28 @@ export const userDetail = (id) => async (dispatch) => {
   }
 };
 
+// Delete user
+export const deleteUser = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DELETE_USER_REQUEST,
+    });
+
+    const { data } = await axios.delete(`/api/toserba/admin/user/delete/${id}`);
+
+    dispatch({
+      type: DELETE_USER_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// General section
 // Login Action
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -280,6 +306,7 @@ export const forgotPassword = (email) => async (dispatch) => {
       payload: data.message,
     });
   } catch (error) {
+    console.log(error);
     dispatch({
       type: FORGOT_PASSWORD_FAIL,
       payload: error.response.data.message,

@@ -19,6 +19,9 @@ import {
   UPDATE_ORDERS_FAIL,
   UPDATE_ORDERS_REQUEST,
   UPDATE_ORDERS_SUCCESS,
+  UPDATE_PAYMENT_FAIL,
+  UPDATE_PAYMENT_REQUEST,
+  UPDATE_PAYMENT_SUCCESS,
 } from "../constants/orderConstants";
 
 // Get orders => Admin
@@ -57,7 +60,7 @@ export const updateOrder = (id, orderData) => async (dispatch) => {
     };
 
     const { data } = await axios.put(
-      `/api/toserba/admin/order/${id}`,
+      `/api/toserba/admin/order/update/${id}`,
       orderData,
       config
     );
@@ -81,9 +84,7 @@ export const deleteOrder = (id) => async (dispatch) => {
       type: DELETE_ORDERS_REQUEST,
     });
 
-    const { data } = await axios.delete(
-      `/api/toserba/admin/order/delete/${id}`
-    );
+    const { data } = await axios.delete(`/api/toserba/admin/order/${id}`);
 
     dispatch({
       type: DELETE_ORDERS_SUCCESS,
@@ -169,6 +170,37 @@ export const getOrderDetails = (id) => async (dispatch) => {
     dispatch({
       type: ORDER_DETAILS_FAIL,
       payload: error.response.data.message,
+    });
+  }
+};
+
+// Update payment
+export const updatePayment = (id, statusData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: UPDATE_PAYMENT_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/toserba/payment/status/${id}`,
+      statusData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_PAYMENT_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PAYMENT_FAIL,
+      error: error.response.data.message,
     });
   }
 };

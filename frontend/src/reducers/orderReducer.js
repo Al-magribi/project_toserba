@@ -6,7 +6,6 @@ import {
   UPDATE_ORDERS_REQUEST,
   UPDATE_ORDERS_RESET,
   UPDATE_ORDERS_SUCCESS,
-  CLEAR_ERRORS,
   CREATE_NEW_ORDER_FAIL,
   CREATE_NEW_ORDER_REQUEST,
   CREATE_NEW_ORDER_SUCCESS,
@@ -20,6 +19,11 @@ import {
   DELETE_ORDERS_SUCCESS,
   DELETE_ORDERS_FAIL,
   DELETE_ORDERS_RESET,
+  UPDATE_PAYMENT_FAIL,
+  UPDATE_PAYMENT_REQUEST,
+  UPDATE_PAYMENT_RESET,
+  UPDATE_PAYMENT_SUCCESS,
+  CLEAR_ERRORS,
 } from "../constants/orderConstants";
 
 // Get All Order
@@ -186,6 +190,45 @@ export const orderDetailsReducer = (state = { order: {} }, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Update payment
+export const updatePaymentReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_PAYMENT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UPDATE_PAYMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isUpdatedPayment: action.payload,
+      };
+
+    case UPDATE_PAYMENT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case UPDATE_PAYMENT_RESET:
+      return {
+        ...state,
+        isUpdated: false,
       };
 
     case CLEAR_ERRORS:

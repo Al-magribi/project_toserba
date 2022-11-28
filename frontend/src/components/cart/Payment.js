@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useAlert } from "react-alert";
 import { clearError, createOrder } from "../../action/orderAction";
+import { clearCart } from "../../action/cartAction";
 
 const Payment = () => {
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
@@ -62,16 +63,18 @@ const Payment = () => {
           status: result.transaction_status,
         };
         dispatch(createOrder(order));
-        localStorage.setItem("result", JSON.stringify(result));
+        dispatch(clearCart(cartItems));
       },
       onPending: function(result) {
         /* You may add your own implementation here */
         order.infoPembayaran = {
-          id: result.transaction_id,
+          order_id: result.order_id,
+          id: result && result.transaction_id,
           status: result.transaction_status,
         };
 
         dispatch(createOrder(order));
+        dispatch(clearCart(cartItems));
       },
       onError: function(result) {
         /* You may add your own implementation here */

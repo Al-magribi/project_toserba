@@ -97,7 +97,7 @@ const OrdersList = () => {
           sort: "asc",
         },
         {
-          label: "Status Pembayaran",
+          label: "Pembayaran",
           field: "paymentStatus",
           sort: "asc",
         },
@@ -105,6 +105,10 @@ const OrdersList = () => {
           label: "Status order",
           field: "orderStatus",
           sort: "asc",
+        },
+        {
+          label: "Resi",
+          field: "resi",
         },
         {
           label: "Action",
@@ -152,6 +156,7 @@ const OrdersList = () => {
                 <strong>{order.orderStatus}</strong>
               </p>
             ),
+          resi: order.resi,
           action: (
             <div>
               <button
@@ -176,6 +181,7 @@ const OrdersList = () => {
   return (
     <Fragment>
       <MetaData title={"Pesanan"} />
+      <h3>Pesanan</h3>
       {loading ? (
         <Loader />
       ) : (
@@ -271,9 +277,9 @@ const OrdersList = () => {
                       value={status}
                       onChange={(e) => setStatus(e.target.value)}
                     >
-                      <option value="processing">Processing</option>
-                      <option value="delivered">Delivered</option>
-                      <option value="completed">Completed</option>
+                      <option value="Processing">Processing</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Completed">Completed</option>
                     </Form.Select>
                     <Form.Group>
                       <Form.Label>Resi</Form.Label>

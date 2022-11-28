@@ -98,24 +98,20 @@ exports.deleteOrder = catchError(async (req, res, next) => {
 exports.updateOrder = catchError(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
 
-  if (order.orderStatus === "Delivered") {
-    return next(new ErrorHandler("Pesanan sudah terkirim", 400));
-  } else {
-    order.orderItems.forEach(async (item) => {
-      await updateStock(item.product, item.quantity);
-    });
+  order.orderItems.forEach(async (item) => {
+    await updateStock(item.product, item.quantity);
+  });
 
-    order.orderStatus = req.body.status;
-    order.resi = req.body.resi;
-    order.deliveredAt = Date.now();
+  order.orderStatus = req.body.status;
+  order.resi = req.body.resi;
+  order.deliveredAt = Date.now();
 
-    await order.save();
+  await order.save();
 
-    res.status(200).json({
-      success: true,
-      message: "Order berhasil diperbarui",
-    });
-  }
+  res.status(200).json({
+    success: true,
+    message: "Order berhasil diperbarui",
+  });
 });
 
 async function updateStock(id, quantity) {
@@ -125,3 +121,17 @@ async function updateStock(id, quantity) {
 
   await product.save({ validateBeforeSave: false });
 }
+
+// Update payment status
+exports.updatePayment = catchError(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  order.infoPembayaran.status = req.body.status;
+
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Pembanyaran berhasil diupdate",
+  });
+});

@@ -27,6 +27,11 @@ const Login = () => {
       navigate(redirect);
     }
 
+    if (error && !error.includes("Login first to access this page")) {
+      Alert.error(error);
+      console.log(error);
+    }
+
     if (error) {
       Alert.error(error);
       dispatch(clearError());
@@ -46,81 +51,85 @@ const Login = () => {
       ) : (
         <Fragment>
           <MetaData title={"Login"} />
+          <div className="login-screen">
+            <Row className="d-flex justify-content-center align-items-center">
+              <Col md={8} lg={6} xs={12}>
+                <Card>
+                  <Card.Header className="bg-primary text-white text-center">
+                    Masuk TOSERBA
+                  </Card.Header>
+                  <Card.Body>
+                    <Form onSubmit={submitHandler}>
+                      <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                          type="email"
+                          placeholder="Masukan Email kamu"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </Form.Group>
 
-          <Row className="vh-100 d-flex justify-content-center align-items-center">
-            <Col md={8} lg={6} xs={12}>
-              <Card>
-                <Card.Header className="bg-primary text-white text-center">
-                  Masuk TOSERBA
-                </Card.Header>
-                <Card.Body>
-                  <Form onSubmit={submitHandler}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label>Email</Form.Label>
-                      <Form.Control
-                        type="email"
-                        placeholder="Masukan Email kamu"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                      <Form.Label>Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Row>
-                      <Col>
-                        <div className="text-center my-2 d-grid gap-2">
-                          <Button type="submit" className="btn btn-login">
-                            Login
-                          </Button>
-                        </div>
-
-                        <Link to="/forgot">
-                          <div className="btn-forgot">
-                            <Button className="btn btn-light" type="button">
-                              Lupa Password
-                            </Button>
-                          </div>
-                        </Link>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Link to="/daftar" className="register">
+                      <Form.Group
+                        className="mb-3"
+                        controlId="formBasicPassword"
+                      >
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                          type="password"
+                          placeholder="Password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Row>
+                        <Col>
                           <div className="text-center my-2 d-grid gap-2">
-                            <Button type="button" className="btn btn-login">
-                              Daftar
+                            <Button type="submit" className="btn btn-login">
+                              Login
                             </Button>
                           </div>
-                        </Link>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <div className="text-center my-2 d-grid gap-2">
-                          <Button className="btn">Facebook</Button>
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <div className="text-center my-2 d-grid gap-2">
-                          <Button className="btn btn-light">Google</Button>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Form>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+
+                          <Link to="/forgot">
+                            <div className="btn-forgot">
+                              <Button className="btn btn-light" type="button">
+                                Lupa Password
+                              </Button>
+                            </div>
+                          </Link>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <Link to="/daftar" className="register">
+                            <div className="text-center my-2 d-grid gap-2">
+                              <Button type="button" className="btn btn-login">
+                                Daftar
+                              </Button>
+                            </div>
+                          </Link>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <div className="text-center my-2 d-grid gap-2">
+                            <Button className="btn">Facebook</Button>
+                          </div>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <div className="text-center my-2 d-grid gap-2">
+                            <Button className="btn btn-light">Google</Button>
+                          </div>
+                        </Col>
+                      </Row>
+                    </Form>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </div>
         </Fragment>
       )}
     </div>

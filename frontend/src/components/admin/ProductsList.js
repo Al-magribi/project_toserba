@@ -119,6 +119,7 @@ const ProductsList = () => {
   return (
     <Fragment>
       <MetaData title={"Produk"} />
+      <h3>Semua produk</h3>
       {loading ? (
         <Loader />
       ) : (

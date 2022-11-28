@@ -22,6 +22,12 @@ import {
   UPDATE_PRODUCT_FAIL,
   UPDATE_PRODUCT_REQUEST,
   UPDATE_PRODUCT_SUCCESS,
+  GET_REVIEWS_REQUEST,
+  GET_REVIEWS_FAIL,
+  GET_REVIEWS_SUCCESS,
+  DELETE_REVIEW_FAIL,
+  DELETE_REVIEW_REQUEST,
+  DELETE_REVIEW_SUCCESS,
 } from "../constants/productsConstant";
 
 // Action All products
@@ -70,56 +76,6 @@ export const getProductDetail = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAIL_FAIL,
-      payload: error.response.data.message,
-    });
-  }
-};
-
-// Create new product => Admin
-export const createProducts = (productData) => async (dispatch) => {
-  try {
-    dispatch({ type: CREATE_PRODUCTS_REQUEST });
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const { data } = await axios.post(
-      "/api/toserba/admin/produk/tambah",
-      productData,
-      config
-    );
-
-    dispatch({
-      type: CREATE_PRODUCTS_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: CREATE_PRODUCTS_FAIL,
-      error: error.response.data.message,
-    });
-  }
-};
-
-// Delete Product => Admin
-export const deleteProduct = (id) => async (dispatch) => {
-  try {
-    dispatch({ type: DELETE_PRODUCT_REQUEST });
-
-    const { data } = await axios.delete(
-      `/api/toserba/admin/produk/hapus/${id}`
-    );
-
-    dispatch({
-      type: DELETE_PRODUCT_SUCCESS,
-      payload: data.success,
-    });
-  } catch (error) {
-    dispatch({
-      type: DELETE_PRODUCT_FAIL,
       payload: error.response.data.message,
     });
   }
@@ -184,6 +140,35 @@ export const createReview = (dataReview) => async (dispatch) => {
 };
 
 // Admin Section
+// Create new product => Admin
+export const createProducts = (productData) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_PRODUCTS_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      "/api/toserba/admin/produk/tambah",
+      productData,
+      config
+    );
+
+    dispatch({
+      type: CREATE_PRODUCTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: CREATE_PRODUCTS_FAIL,
+      error: error.response.data.message,
+    });
+  }
+};
+
 // get products
 export const getAdminProducts = () => async (dispatch) => {
   try {
@@ -198,6 +183,71 @@ export const getAdminProducts = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ADMIN_PRODUCTS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Delete Product => Admin
+export const deleteProduct = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_PRODUCT_REQUEST });
+
+    const { data } = await axios.delete(
+      `/api/toserba/admin/produk/hapus/${id}`
+    );
+
+    dispatch({
+      type: DELETE_PRODUCT_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_PRODUCT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Get Reviews
+export const getReviews = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_REVIEWS_REQUEST,
+    });
+
+    const { data } = await axios.get(`/api/toserba/reviews?id=${id}`);
+
+    dispatch({
+      type: GET_REVIEWS_SUCCESS,
+      payload: data.reviews,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_REVIEWS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Delete Review
+export const deleteReview = (productId, reviewId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DELETE_REVIEW_REQUEST,
+    });
+
+    const { data } = await axios.delete(
+      `/api/toserba/reviews?productId=${productId}&id=${reviewId}`
+    );
+
+    dispatch({
+      type: DELETE_REVIEW_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_REVIEW_FAIL,
       payload: error.response.data.message,
     });
   }

@@ -1,63 +1,78 @@
 /* General */
 body {
   min-height: 80vh !important;
-  background-color: #f8ce0b;
 }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  padding: 2% 0;
-}
-
 small {
   font-size: 10px !important;
 }
 
+h1,
+h2,
+h3 {
+  padding: 2% 0;
+}
+
 /* Navbar */
-.avatar-nav {
-  margin-right: 0.6rem;
-  height: 2.2rem;
-  width: 2.2rem;
+::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
 }
 
-.Brand {
-  text-decoration: none;
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: #f5f5f5;
 }
 
-.form-search {
-  width: 500px;
-  margin: 1rem 7rem;
+::-webkit-scrollbar-thumb {
+  background-color: rgba(66, 66, 66, 0.2);
+  border: 0px;
+  background-clip: padding-box;
+  border-radius: 5px;
 }
 
-.search {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
+nav {
+  padding: 1rem 1rem;
 }
 
-.b-search {
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-  width: 50px;
+.brand {
+  margin-left: 5rem;
+}
+
+#search_btn {
+  background-color: #ff731d;
+}
+
+.input-group {
+  width: 90%;
+  margin-right: 35%;
+}
+
+#search_field {
+  height: 2.4rem;
+  padding: 1rem;
+}
+
+#login_btn,
+#view_btn {
+  background-color: #ff731d;
+  padding: 0.4rem 1.8rem;
+  font-family: calibri;
+}
+.cart-block {
+  margin-right: 2rem;
+}
+
+#cart {
+  font-size: 1rem;
+  color: white;
 }
 
 #cart_count {
   background-color: #ff731d;
   padding: 0.2rem 0.5rem;
   border-radius: 0.2rem;
-  color: #ffff;
-  font-weight: bold;
+  color: white;
   font-size: 0.9rem;
   margin-left: 0.5rem;
-  margin-right: 1rem;
-}
-
-.cart-link,
-.login {
-  margin: auto;
 }
 
 /* Dropdown Menu */
@@ -320,9 +335,11 @@ small {
 .payment-screen,
 .status-screen,
 .order-screen,
+.login-screen,
 .orderDetails-scren {
   font-size: 14px;
-  margin-bottom: 10rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 /* Check out Steps */

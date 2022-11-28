@@ -6,6 +6,7 @@ const {
   getOrders,
   deleteOrder,
   updateOrder,
+  updatePayment,
 } = require("../controller/orderController");
 const { authenticatedUser, authorizeRoles } = require("../middlewares/auth");
 const router = express.Router();
@@ -16,6 +17,8 @@ router.route("/pesanan/baru").post(authenticatedUser, newOrder);
 router.route("/order/:id").get(authenticatedUser, singlerOrder);
 // pesanan saya / my orders
 router.route("/orders/me").get(authenticatedUser, myOrders);
+
+// admin section
 // all orders => admin
 router
   .route("/admin/orders")
@@ -24,9 +27,10 @@ router
 router
   .route("/admin/order/:id")
   .delete(authenticatedUser, authorizeRoles("admin"), deleteOrder);
+
+// Genreal section
 // Update order processing to delivered
-router
-  .route("/admin/order/:id")
-  .put(authenticatedUser, authorizeRoles("admin"), updateOrder);
+router.route("/admin/order/update/:id").put(authenticatedUser, updateOrder);
+router.route("/payment/status/:id").put(authenticatedUser, updatePayment);
 
 module.exports = router;

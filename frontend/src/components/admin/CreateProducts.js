@@ -82,6 +82,7 @@ const CreateProducts = () => {
     <Fragment>
       <MetaData title={"Tambah Produk"} />
       <div className="admin-screen">
+        <h3>Tambah Produk</h3>
         <div className="container">
           <form
             className="shadow-lg"

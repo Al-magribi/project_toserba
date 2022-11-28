@@ -2,12 +2,21 @@ import React, { useEffect, useState, useRef } from "react";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { clearError, getOrderDetails } from "../../action/orderAction";
+import {
+  clearError,
+  getOrderDetails,
+  updateOrder,
+  updatePayment,
+} from "../../action/orderAction";
 import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
 import Loader from "../layouts/Loader";
 import MetaData from "../layouts/MetaData";
 import { NumericFormat } from "react-number-format";
 import { useReactToPrint } from "react-to-print";
+import {
+  UPDATE_ORDERS_RESET,
+  UPDATE_PAYMENT_RESET,
+} from "../../constants/orderConstants";
 
 const OrderDetails = () => {
   const componentRef = useRef();
@@ -18,15 +27,17 @@ const OrderDetails = () => {
 
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   const dispatch = useDispatch();
   const Alert = useAlert();
   const params = useParams();
 
   const { error, loading, order = {} } = useSelector(
     (state) => state.orderDetails
+  );
+
+  const { error: errorUpdate, isUpdated } = useSelector((state) => state.order);
+  const { error: errorPayment, isUpdatedPayment } = useSelector(
+    (state) => state.payment
   );
 
   const {
@@ -47,7 +58,63 @@ const OrderDetails = () => {
     if (error) {
       dispatch(clearError());
     }
-  }, [Alert, error, dispatch, params.id]);
+
+    if (isUpdated) {
+      Alert.success("Order berhasil diperbarui");
+      dispatch({ type: UPDATE_ORDERS_RESET });
+    }
+
+    if (errorUpdate) {
+      Alert.error("Order tidak berhasil diperbarui");
+      dispatch(clearError());
+    }
+
+    if (isUpdatedPayment) {
+      Alert.success("Pembayaran berhasil diperbarui");
+      dispatch({ type: UPDATE_PAYMENT_RESET });
+    }
+
+    if (errorPayment) {
+      Alert.error("Pembayaran tidak bisa diperbarui");
+      dispatch(clearError());
+    }
+  }, [
+    Alert,
+    error,
+    dispatch,
+    params.id,
+    isUpdated,
+    errorUpdate,
+    isUpdatedPayment,
+    errorPayment,
+  ]);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const updateStatus = (id) => {
+    const status = "Completed";
+    const resi = order.resi;
+
+    const formData = new FormData();
+    formData.set("status", status);
+    formData.set("resi", resi);
+
+    dispatch(updateOrder(id, formData));
+  };
+
+  const getPaymentStatus = async (id) => {
+    const data = await fetch(`/api/toserba/status/${id}`);
+    const result = await data.json();
+    const status = result.response.transaction_status;
+
+    const orderId = order._id;
+
+    const formData = new FormData();
+    formData.set("status", status);
+
+    dispatch(updatePayment(orderId, formData));
+  };
 
   return (
     <div className="orderDetails-scren">
@@ -72,8 +139,8 @@ const OrderDetails = () => {
                         className={
                           order.orderStatus &&
                           String(order.orderStatus).includes(
-                            "DELIVERED",
-                            "COMPLETE"
+                            "Delivered",
+                            "Completed"
                           )
                             ? "greenColor"
                             : "redColor"
@@ -86,11 +153,25 @@ const OrderDetails = () => {
                 </Row>
                 <Row>
                   <Col>
-                    <button
-                      className="btn btn-outline-primary"
-                      onClick={handleShow}
-                    >
-                      INVOICE
+                    {order.orderStatus && order.orderStatus === "Completed" ? (
+                      <button
+                        className="btn btn-outline-success"
+                        onClick={handleShow}
+                      >
+                        INVOICE
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-outline-danger"
+                        onClick={() => updateStatus(order._id)}
+                      >
+                        Selesaikan Pesanan
+                      </button>
+                    )}
+                  </Col>
+                  <Col>
+                    <button className="btn btn-outline-secondary">
+                      Resi: {order.resi}
                     </button>
                   </Col>
                 </Row>
@@ -145,16 +226,6 @@ const OrderDetails = () => {
                       </Row>
                       <hr />
                       <Row>
-                        <Col>Bank</Col>
-                        <Col>: {infoPembayaran && infoPembayaran.bank}</Col>
-                      </Row>
-                      <hr />
-                      <Row>
-                        <Col>Virtual Account</Col>
-                        <Col>: {infoPembayaran && infoPembayaran.va}</Col>
-                      </Row>
-                      <hr />
-                      <Row>
                         <Col>Tagihan</Col>
                         <Col>
                           :{" "}
@@ -171,6 +242,18 @@ const OrderDetails = () => {
                         <Col>Status Transaksi</Col>
                         <Col>: {infoPembayaran && infoPembayaran.status}</Col>
                       </Row>
+                      <div className="mt-5 text-end">
+                        <button
+                          className="btn btn-light"
+                          onClick={() =>
+                            getPaymentStatus(
+                              infoPembayaran && infoPembayaran.order_id
+                            )
+                          }
+                        >
+                          Update Transaksi
+                        </button>
+                      </div>
                     </Card.Body>
                   </Card>
                 </Col>
@@ -182,8 +265,8 @@ const OrderDetails = () => {
                     <Card.Body>
                       {orderItems &&
                         orderItems.map((order) => (
-                          <div className="my-2">
-                            <Row key={order.product}>
+                          <div key={order.product} className="my-2">
+                            <Row>
                               <Col>
                                 <div className="align-items-center">
                                   <img

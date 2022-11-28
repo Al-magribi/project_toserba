@@ -66,6 +66,7 @@ exports.proceedPayment = (req, res, next) => {
     });
 };
 
+//
 exports.paymentResponse = (req, res, next) => {
   snap.transaction
     .status(req.params.order_id)

@@ -7,12 +7,15 @@ import {
   orderDetailsReducer,
   orderReducer,
   orderUpDelReducer,
+  updatePaymentReducer,
 } from "./reducers/orderReducer";
 import {
   createProductReducer,
+  getReviewsReducer,
   ProductDetailReducer,
   productReducer,
   productsReducer,
+  reviewDeleteReducer,
   reviewReducer,
 } from "./reducers/productsReducer";
 import {
@@ -29,6 +32,8 @@ const reducer = {
   productDetail: ProductDetailReducer,
   newProduct: createProductReducer,
   product: productReducer,
+  productReviews: getReviewsReducer,
+  review: reviewDeleteReducer,
   auth: authReducer,
   user: userReducer,
   users: allUsersReducer,
@@ -39,8 +44,9 @@ const reducer = {
   myOrder: myOrdersReducer,
   orderDetails: orderDetailsReducer,
   order: orderUpDelReducer,
-  newReview: reviewReducer,
   allOrders: getOrdersReducer,
+  newReview: reviewReducer,
+  payment: updatePaymentReducer,
 };
 
 const initialState = {
