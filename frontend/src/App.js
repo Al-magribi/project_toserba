@@ -34,13 +34,14 @@ import Reviews from "./components/admin/Reviews";
 import { useSelector } from "react-redux";
 
 function App() {
+  const { user, authenticatedUser, loading } = useSelector(
+    (state) => state.auth
+  );
+
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
 
-  const { user, authenticatedUser, loading } = useSelector(
-    (state) => state.auth
-  );
   return (
     <div>
       <BrowserRouter>

@@ -38,7 +38,7 @@ export const getOrdersReducer = (state = { orders: [] }, action) => {
       return {
         loading: false,
         orders: action.payload.orders,
-        totalAmount: action.payload.totalHarga,
+        totalAmount: action.payload.jmlSeluruhHarga,
       };
 
     case ADMIN_ORDERS_FAIL:

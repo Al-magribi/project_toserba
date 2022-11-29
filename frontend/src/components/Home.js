@@ -153,13 +153,7 @@ const Home = () => {
                 </Col>
                 {products &&
                   products.map((product) => (
-                    <Col
-                      key={product._id}
-                      sm={6}
-                      md={4}
-                      lg={3}
-                      className="card-product"
-                    >
+                    <Col key={product._id} className="card-product">
                       <Product product={product} />
                     </Col>
                   ))}
@@ -169,13 +163,7 @@ const Home = () => {
             <Row>
               {products &&
                 products.map((product) => (
-                  <Col
-                    key={product._id}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    className="card-product"
-                  >
+                  <Col key={product._id} className="card-product">
                     <Product product={product} />
                   </Col>
                 ))}

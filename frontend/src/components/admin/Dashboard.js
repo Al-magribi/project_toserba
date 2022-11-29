@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAdminProducts } from "../../action/productsAction";
 import { getUsers } from "../../action/usersAction";
 import { getOrders } from "../../action/orderAction";
+import { NumericFormat } from "react-number-format";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
 
   const { products } = useSelector((state) => state.products);
   const { users } = useSelector((state) => state.users);
-  const { orders } = useSelector((state) => state.allOrders);
+  const { orders, totalAmount } = useSelector((state) => state.allOrders);
 
   let outOfStock = 0;
   products.forEach((product) => {
@@ -46,7 +47,15 @@ const Dashboard = () => {
                     <div className="card-body">
                       <div className="text-center card-font-size">
                         Total Amount
-                        <br /> <b>Rp 250.000</b>
+                        <br />{" "}
+                        <b>
+                          <NumericFormat
+                            value={totalAmount}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"Rp "}
+                          />
+                        </b>
                       </div>
                     </div>
                   </div>

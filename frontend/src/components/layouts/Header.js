@@ -34,7 +34,7 @@ const Header = () => {
   return (
     <Fragment>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div className="row container-fluid">
+        <div className="container-fluid row">
           <div className="col-12 col-md-3 d-flex justify-content-center">
             {user && user.role === "admin" ? (
               <IconContext.Provider value={{ color: "#fff" }}>
@@ -84,7 +84,7 @@ const Header = () => {
                 </span>
               </Link>
             </div>
-            {user ? (
+            {user && user ? (
               <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic">
                   <figure className="avatar  avatar-nav">

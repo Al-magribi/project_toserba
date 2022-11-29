@@ -112,7 +112,7 @@ exports.deleteProduct = catchError(async (req, res) => {
 // Showing products
 exports.getProducts = catchError(async (req, res, next) => {
   // menentukan produk yang tampil ber halaman
-  const productPerPage = 8;
+  const productPerPage = 10;
   const productsCount = await Product.countDocuments();
 
   // fitur search menggunakan keyword nama produk, diharapkan seluruh produk yang memiliki huruf yang

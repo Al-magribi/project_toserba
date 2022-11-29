@@ -27,16 +27,14 @@ const Login = () => {
       navigate(redirect);
     }
 
-    if (error && !error.includes("Login first to access this page")) {
-      Alert.error(error);
-      console.log(error);
-    }
-
     if (error) {
+      if (error === "Login first to access this page") {
+        return;
+      }
       Alert.error(error);
       dispatch(clearError());
     }
-  }, [dispatch, Alert, error, authenticatedUser, navigate]);
+  }, [dispatch, Alert, authenticatedUser, error, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
