@@ -83,14 +83,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/reset/:token"
-              element={
-                <ProtectedRoute>
-                  <NewPassword />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/reset/:token" element={<NewPassword />} />
             <Route path="/forgot" element={<ForgotPassword />} />
             {/* Orders */}
             <Route

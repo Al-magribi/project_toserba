@@ -87,17 +87,7 @@ const Login = () => {
                               Login
                             </Button>
                           </div>
-
-                          <Link to="/forgot">
-                            <div className="btn-forgot">
-                              <Button className="btn btn-light" type="button">
-                                Lupa Password
-                              </Button>
-                            </div>
-                          </Link>
                         </Col>
-                      </Row>
-                      <Row>
                         <Col>
                           <Link to="/daftar" className="register">
                             <div className="text-center my-2 d-grid gap-2">
@@ -110,16 +100,13 @@ const Login = () => {
                       </Row>
                       <Row>
                         <Col>
-                          <div className="text-center my-2 d-grid gap-2">
-                            <Button className="btn">Facebook</Button>
-                          </div>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <div className="text-center my-2 d-grid gap-2">
-                            <Button className="btn btn-light">Google</Button>
-                          </div>
+                          <Link to="/forgot">
+                            <div className="btn-forgot text-end">
+                              <Button className="btn btn-light" type="button">
+                                Lupa Password
+                              </Button>
+                            </div>
+                          </Link>
                         </Col>
                       </Row>
                     </Form>

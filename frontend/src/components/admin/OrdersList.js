@@ -29,8 +29,6 @@ const OrdersList = () => {
 
   const { detailPengiriman, orderItems, user, ongkir } = order;
 
-  const orderId = orders && orders.map((order) => order._id);
-
   // Update Order Status
   const [show, setShow] = useState(false);
 
@@ -195,7 +193,7 @@ const OrdersList = () => {
       )}
       <Modal show={show} size="lg" onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Order id #{orderId}</Modal.Title>
+          <Modal.Title>Order id #{order._id}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Row>
