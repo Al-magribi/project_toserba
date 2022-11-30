@@ -150,9 +150,9 @@ exports.forgotPassword = catchError(async (req, res, next) => {
 
   // url untuk reset password
   // aktifkan jika blm ke frontend
-  // const urlReset = `${req.protocol}://${req.get("host")}/reset/${resetToken}`;
+  const urlReset = `${req.protocol}://${req.get("host")}/reset/${resetToken}`;
 
-  const urlReset = `${process.env.FRONTEND_URL}/reset/${resetToken}`;
+  // const urlReset = `${process.env.FRONTEND_URL}/reset/${resetToken}`;
 
   // Pesan email untuk reset password / reset password URL
   const message = `Klik link dibawah ini unutk mereset password anda:\n\n${urlReset}\n\nAbaikan jika anda tidak mereset password`;
