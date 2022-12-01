@@ -1,0 +1,66 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.8.5",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.0.0",
+    "crypto-browserify": "^3.12.0",
+    "dotenv": "^16.0.3",
+    "jquery": "^3.6.1",
+    "mdbreact": "^5.2.0",
+    "midtrans-client": "^1.3.1",
+    "rc-slider": "^10.0.1",
+    "react": "^18.2.0",
+    "react-alert": "^7.0.3",
+    "react-alert-template-basic-with-icons": "^1.2.4",
+    "react-bootstrap": "^2.5.0",
+    "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
+    "react-icons": "^4.6.0",
+    "react-js-pagination": "^3.0.2",
+    "react-number-format": "^5.0.1",
+    "react-redux": "^8.0.4",
+    "react-router-bootstrap": "^0.26.2",
+    "react-router-dom": "^6.4.1",
+    "react-scripts": "^2.1.3",
+    "react-select": "^5.6.0",
+    "react-slider": "^2.0.4",
+    "react-to-print": "^2.14.10",
+    "react-toastify": "^9.0.8",
+    "redux": "^4.2.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
+    "stream-browserify": "^3.0.0",
+    "styled-components": "^5.3.6",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://127.0.0.1:2000/"
+}
