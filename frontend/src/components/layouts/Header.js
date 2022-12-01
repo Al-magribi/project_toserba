@@ -33,7 +33,7 @@ const Header = () => {
 
   return (
     <Fragment>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+      <nav className="navbar sticky-top  navbar-expand-lg navbar-dark bg-primary">
         <div className="container-fluid row">
           <div className="col-12 col-md-3 d-flex justify-content-center">
             {user && user.role === "admin" ? (
