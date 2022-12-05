@@ -9,8 +9,7 @@
 
 # production
 /main/
-/frontend/
-/frontend/build
+
 
 
 # misc
